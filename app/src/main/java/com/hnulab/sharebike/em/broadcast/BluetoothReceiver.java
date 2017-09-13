@@ -18,7 +18,7 @@ import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 public class BluetoothReceiver extends BroadcastReceiver {
 
           public static String BLUETOOTH_PIN = "1234";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
-          public static String BLUETOOTH_NAME = "HC-04";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
+          public static String BLUETOOTH_NAME = "HC-05";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
           public static String EXTRA_DEVICE_ADDRESS = "address";
 
           //广播action

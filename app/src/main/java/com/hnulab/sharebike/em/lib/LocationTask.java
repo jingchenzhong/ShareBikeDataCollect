@@ -40,6 +40,9 @@ public class LocationTask implements AMapLocationListener,
 
 	private RegeocodeTask mRegecodeTask;
 
+	//fixme test数据
+	private int sum=0;
+
 	private LocationTask(Context context) {
 		mLocationClient = new AMapLocationClient(context);
 		mLocationClient.setLocationListener(this);
@@ -81,6 +84,7 @@ public class LocationTask implements AMapLocationListener,
 		AMapLocationClientOption option=new AMapLocationClientOption();
 		option.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 		option.setOnceLocation(false);
+		//隔多长时间定位一次
 		option.setInterval(1000);
 		mLocationClient.setLocationOption(option);
 		mLocationClient.startLocation();
@@ -105,13 +109,16 @@ public class LocationTask implements AMapLocationListener,
 	}
 
 
-
+	// TODO: 2017/9/13 获取数据
 	@Override
 	public void onLocationChanged(AMapLocation amapLocation) {
 		if (amapLocation != null && amapLocation.getErrorCode() == 0) {
 			PositionEntity entity = new PositionEntity();
 			entity.latitue = amapLocation.getLatitude();
 			entity.longitude = amapLocation.getLongitude();
+//			entity.latitue = amapLocation.getLatitude()+sum;
+//			entity.longitude = amapLocation.getLongitude()+sum;
+//			sum+=5;
 
 			if (!TextUtils.isEmpty(amapLocation.getAddress())) {
 				entity.address = amapLocation.getAddress();

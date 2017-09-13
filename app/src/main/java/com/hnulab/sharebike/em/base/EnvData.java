@@ -18,11 +18,11 @@ public class EnvData {
                     this.time = time;
           }
 
-          public String getCo2() {
+          public double getCo2() {
                     return Co2;
           }
 
-          public void setCo2(String co2) {
+          public void setCo2(int co2) {
                     Co2 = co2;
           }
 
@@ -42,10 +42,30 @@ public class EnvData {
                     this.latitude = latitude;
           }
 
+          public String getAddress() {
+                    return address;
+          }
+
+          public void setAddress(String address) {
+                    this.address = address;
+          }
+
+          public String getCity() {
+                    return city;
+          }
+
+          public void setCity(String city) {
+                    this.city = city;
+          }
+
           //二氧化碳浓度
-          String Co2;
+          int Co2;
           //经度
           double longitude;
           //纬度
           double latitude;
+          //地址
+          String address;
+          //城市
+          String city;
 }

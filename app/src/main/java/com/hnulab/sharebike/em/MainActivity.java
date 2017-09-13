@@ -61,6 +61,7 @@ import com.hnulab.sharebike.em.activity.MyTripActivity;
 import com.hnulab.sharebike.em.activity.MyWalletActivity;
 import com.hnulab.sharebike.em.activity.PersonalInformationActivity;
 import com.hnulab.sharebike.em.activity.UserKnowActivity;
+import com.hnulab.sharebike.em.base.EnvData;
 import com.hnulab.sharebike.em.broadcast.BluetoothReceiver;
 import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 import com.hnulab.sharebike.em.dialog.LoadDialog;
@@ -77,11 +78,14 @@ import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 import com.hnulab.sharebike.em.util.CommonUtils;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 //import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
@@ -166,9 +170,16 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
           int nn=1;
 
           public String key="";
-
+          //当前二氧化碳浓度
+          private String co2_data;
           //蓝牙权限
           private int MY_PERMISSION_REQUEST_CONSTANT=1;
+
+
+          //时间获取格式
+          private SimpleDateFormat formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss");
+
+          private List<EnvData> envDatas=new ArrayList<>();
 
 
           @Override
@@ -493,10 +504,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                                         clickRefresh();
                                         break;
                               case R.id.iv_scan_code:
-                                        //蓝牙连接
-//                                        BluetoothConnect();
-                                        Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-                                        startActivityForResult(intent, REQUEST_CODE);
+                                        //TODO 点击扫码
+
+//                                        BluetoothReceiver.BLUETOOTH_NAME="HC-05";
+//                                        BluetoothReceiver.BLUETOOTH_PIN="1234";
+                                        BluetoothConnect();
+//                                        Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+//                                        startActivityForResult(intent, REQUEST_CODE);
                                         break;
                     }
           }
@@ -539,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
 
           /**
-           * description:连接蓝牙设备 TODO
+           * description:通知设备进行蓝牙连接
            * auther：luojie
            * time：2017/9/12 16:35
            */
@@ -569,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     return;
           }
 
-          //注册广播
+          //注册蓝牙连接反馈的广播
           private void initbroadcast() {
                     // 动态注册广播
                     IntentFilter filter = new IntentFilter();
@@ -578,9 +592,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     registerReceiver(broadcastReceiver, filter);
           }
 
-
           /**
-           * 定义广播接收器（内部类）
+           * description:蓝牙连接成功，进行数据更新
+           * auther：luojie
+           * time：2017/9/13 10:46
            */
           private class UpdateUIBroadcastReceiver extends BroadcastReceiver {
 
@@ -630,7 +645,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
           }
 
 
-          //接收数据线程
+
+          //蓝牙数据接收线程
           Thread ReadThread=new Thread(){
 
                     public void run(){
@@ -657,9 +673,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                                                             }
                                                             n++;
                                                   }
-                                                  String s = new String(buffer_new,0,n);
+                                                  // TODO: 2017/9/13 CO2 数据获取
+                                                  co2_data = new String(buffer_new, 0, n-1);
 
-                                                  System.out.println("Co2浓度：-->"+s);
+                                                  Log.i("Co2","浓度：-->"+co2_data);
                                                   //延迟1s
                                                   Thread.sleep(1000);
 //                                                  String[] split = s.split("\n");
@@ -675,6 +692,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
           @Override
           public void onCameraChange(CameraPosition cameraPosition) {
+                    Log.e(TAG, "onCameraChange" + cameraPosition.target);
           }
 
           @Override
@@ -744,6 +762,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     mPositionMark.setClickable(false);
           }
 
+          //一秒定位一次，获取到所有位置信息
           @Override
           public void onLocationGet(PositionEntity entity) {
                     // todo 这里在网络定位时可以减少一个逆地理编码
@@ -759,6 +778,34 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     mInitialMark.setPosition(mStartPosition);
                     initLocation = mStartPosition;
                     Log.e("onLocationGet", "onLocationGet" + mStartPosition);
+                    //如果环境监测数据不为空，则开始填充数据
+                    if (co2_data != null) {
+                              //封装环境数据信息
+                              EnvData envData = new EnvData();
+                              //获取当前时间
+                              Date curDate =  new Date(System.currentTimeMillis());
+                              envData.setLatitude(entity.latitue);
+                              envData.setLongitude(entity.longitude);
+                              envData.setCity(entity.city);
+                              envData.setAddress(entity.address);
+                              envData.setCo2(Integer.parseInt(co2_data));
+                              envData.setTime(formatter.format(curDate));
+                              System.out.println(envData.getLatitude());
+                              System.out.println(envData.getLongitude());
+                              System.out.println(envData.getTime());
+                              System.out.println(envData.getCo2());
+                              System.out.println(envData.getCity());
+                              System.out.println(envData.getAddress());
+                              //填充数据到集合
+                              envDatas.add(envData);
+                    }
+                    //如果缓存数据已经有100条
+                    if (envDatas.size()==100) {
+                              // TODO 联网上传数据
+                              envDatas.clear();
+
+                    }
+
           }
 
           @Override
@@ -958,4 +1005,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     Log.e(TAG, "getInfoContents");
                     return null;
           }
+
+
+
 }
