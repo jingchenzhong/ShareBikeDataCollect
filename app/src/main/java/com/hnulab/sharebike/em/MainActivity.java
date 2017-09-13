@@ -578,6 +578,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             return;
         }
         if (_socket == null) {
+            //触发系统广播ACTION_FOUND
             _bluetooth.startDiscovery();
         } else {
             //关闭连接socket
