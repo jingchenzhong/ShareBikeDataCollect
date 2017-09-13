@@ -53,4 +53,6 @@ dependencies {
     compile 'cn.yipianfengye.android:zxing-library:2.1'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     compile 'com.lzy.widget:imagepicker:0.5.4'
+    compile 'org.xutils:xutils:3.5.0'
+    compile 'com.google.code.gson:gson:2.8.1'
 }
