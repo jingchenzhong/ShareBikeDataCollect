@@ -3,210 +3,228 @@
 
     <item
         is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-25.2.0_564c7074487beea84114a2a3a00b98e24d744139.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.lzy.widget\imagepicker\0.5.4\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="21ef0f6c98f5df394ea84552266290ede4591a25">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.lzy.widget-imagepicker-0.5.4_8b82c9e41816bd33756cd1d15d53b3898b7422aa.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-media-compat-25.2.0_480668166a5d4215d7d0f2a2e527d7b09c483007.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\transition\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e51c2f662bb72419632af5192553c37e33890a99">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-transition-25.2.0_c25b38c0155676c7e91076d7f3b6e37d8c1cd791.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.databinding\adapters\1.2.1\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="c56d29136c2257f63f08c29c4e739efb03b06c7d">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.databinding-adapters-1.2.1_553861409b6479004ac65d002df9f6c52966d59b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-25.2.0_0f7431a29dc67e664c8ad9d3139a7dbeb83a4ac0.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="810f41e5b7fd99f196ebeabe865ba2c54e7e76dc">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-25.2.0_02b74e965394cf6b27ca2dab6e1de84bd9a371bb.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-25.2.0_cdf8714d50428519f86bd00936ddaeddfd9e77d4.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\design\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="ea6a989b83d19b1b461281e0475a6cd6514897f8">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-design-25.2.0_8b5b852047aef1653c9ed5a587ab8107ba387f1c.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\cn.yipianfengye.android\zxing-library\2.1\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="97e7daa2ee778fe5829b88c6d7c1276544235e9e">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\cn.yipianfengye.android-zxing-library-2.1_8f9d95a6cd280366e88b50d47c13c1b0eea710a9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="702d339bc0a81d21354cd7e2cf2b67225fa4a16c">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-25.2.0_01afcd133260d48e6d0e06753fda7a9257b98fd1.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\clover\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.7.0\9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4\glide-3.7.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\glide-3.7.0_190ab990bb5d549faaeaaab60ebf2fc9d06f2cd8.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-25.2.0_7006e7d4e94f7f090200c8556b1e5e1dc2ef1d09.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="F:\android-sdk\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\support-annotations-25.2.0_d1e31b0432d85294d976b5c6f9bc874d4bd64dbd.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.github.chrisbanes.photoview\library\1.2.4\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="98b5309c8d368a7c83ca5f90e0c905044c195edd">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.github.chrisbanes.photoview-library-1.2.4_51a8024266f9d6701cb097738b8671b447a80315.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="152de8da301561dcb0946471697a420d8f7a68c5">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-25.2.0_90665f0d2bf3bc05aea7eaceaef6cd87e2a35b2a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\cn.yipianfengye.android\zxing-library\2.1\jars\libs\zxing.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="360a1215dccb403d17e9cb9934434e31e4b29b80">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\zxing_e5e38867f630d59a961138bf2a17a8b87cafc11f.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\src\main\jniLibs\AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.3.0_20170410.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="255b84577f222699367fdeeb3080787423b4bd64">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.3.0_20170410_405099aa4b65b2f9acfa79a8db2a279e8ed00e6a.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="cb454b52545859ed2f24a6c01366805b0fa04b22">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-25.2.0_32be9caa9f9a9aab3d99fa67db827f2cc2e79d64.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.2.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="25.0.2"
-        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-25.2.0_bad82f7defb7eb70c03af911ac8412dc93484c1d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\com.android.databinding\library\1.2.1\jars\classes.jar"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.databinding\library\1.2.1\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="957dc30b1495f8689271e00d56ab09cc9192df02">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\com.android.databinding-library-1.2.1_e5c6ec4e48ca04d04bbc49eb659a0338228398bb.jar" />
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.databinding-library-1.2.1_0881355aee99d21be598cad9c97d1fd46a46efd4.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="C:\Users\clover\.gradle\caches\modules-2\files-2.1\com.android.databinding\baseLibrary\2.2.3\b4b51d1925cdfda98fd861230c1ecb5855500129\baseLibrary-2.2.3.jar"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.lzy.widget\imagepicker\0.5.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="21ef0f6c98f5df394ea84552266290ede4591a25">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.lzy.widget-imagepicker-0.5.4_a83b49c8d861864f8d9d276fe790a90d410910c0.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="810f41e5b7fd99f196ebeabe865ba2c54e7e76dc">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-25.2.0_222fcea1f2f37ac4cb407212690a0ac9450f9e86.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.databinding\adapters\1.2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c56d29136c2257f63f08c29c4e739efb03b06c7d">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.databinding-adapters-1.2.1_d0d6478c836a15f2369d2c70642767468808a029.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\org.xutils\xutils\3.5.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c70d3d4cb2d0b16c435c716fa169cb506929269b">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\org.xutils-xutils-3.5.0_934efaa4439a100ba6ca5337b37fda4b93ff02f3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\lj_xwl\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.7.0\9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4\glide-3.7.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9e9eeaf9948ee4d6c3ab354e8dc14368f16994a4">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\glide-3.7.0_2a77719626eea41e7ccdbdfdde7c72eccbc337e7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="702d339bc0a81d21354cd7e2cf2b67225fa4a16c">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-25.2.0_0f3549db1f3f592111158612f44cd27c64f47e94.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8fe8a8f77d651982ce5e18f6187dc4daf914ac57">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-25.2.0_3eae1244bd94a9cceae902e20fde8f3f25897354.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\lj_xwl\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.1\2a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0\gson-2.8.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="02a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\gson-2.8.1_055ef25174f72cb9999e99486dfa72761957924e.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.github.chrisbanes.photoview\library\1.2.4\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="98b5309c8d368a7c83ca5f90e0c905044c195edd">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.github.chrisbanes.photoview-library-1.2.4_89c031e2ceabee097a0c2dfdcc9a669daa48bf8c.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ee394a892dd21c03a528139c1e8d4e0e1264ac84">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-media-compat-25.2.0_b1c0e44dc73378a2fe357be5347bd476617eef45.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="fa0446a14ed5dd3725047d6399ffea771a564b30">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-25.2.0_c211f82f043727225f5e0bdffe706d6e3e2f2344.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\src\main\jniLibs\AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.3.0_20170410.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="255b84577f222699367fdeeb3080787423b4bd64">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.3.0_20170410_c94bedb8f6898f84a78318f64e03a8b40f7517bc.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\lj_xwl\.gradle\caches\modules-2\files-2.1\com.android.databinding\baseLibrary\2.2.3\b4b51d1925cdfda98fd861230c1ecb5855500129\baseLibrary-2.2.3.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="b4b51d1925cdfda98fd861230c1ecb5855500129">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\baseLibrary-2.2.3_6d4f2f18686ba4489b3fe4c77fd56c6d51df136b.jar" />
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\baseLibrary-2.2.3_5069f9b5d817105b5432c1332276c88dddcca882.jar" />
     </item>
     <item
         is-multidex="false"
-        jar="D:\space\sharebike\sharebike\app\build\intermediates\exploded-aar\jp.wasabeef\glide-transformations\2.0.2\jars\classes.jar"
+        jar="D:\lj_xwl\SDK\Sdk\extras\android\m2repository\com\android\support\support-annotations\25.2.0\support-annotations-25.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4a5a82a027706397fff621b22fd6fa796e91d7c5">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\support-annotations-25.2.0_29c2c61df33590244512490164c3eb237e35b34a.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="67eb33110dbacb46a48175b08ae0c96761d2c17d">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-25.2.0_ba223285921df62471580af3cc6d52442fe540d1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\jp.wasabeef\glide-transformations\2.0.2\jars\classes.jar"
         jumboMode="false"
         optimize="true"
         revision="25.0.2"
         sha1="3305fe8fabbf56b45fa503d29d691bc84290ff23">
-        <dex dex="D:\space\sharebike\sharebike\app\build\intermediates\pre-dexed\debug\jp.wasabeef-glide-transformations-2.0.2_c02f50a6493851d5d3428265d9955dca787ab78e.jar" />
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\jp.wasabeef-glide-transformations-2.0.2_eae6b10671a41ce412a5929273880a3f2929b86d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="152de8da301561dcb0946471697a420d8f7a68c5">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-25.2.0_397970edd0d4146708d434813f90ba905c887f0f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\design\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ea6a989b83d19b1b461281e0475a6cd6514897f8">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-design-25.2.0_fa46c5163c6ae69aee56523ff372ec7cf3a6ac7f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\transition\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e51c2f662bb72419632af5192553c37e33890a99">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-transition-25.2.0_762aa295026de7ab22ea703a49a4ecae1512fdc1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-25.2.0_937cf28bcbe3f972d49e5f61dd2584df28a693ad.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\cn.yipianfengye.android\zxing-library\2.1\jars\libs\zxing.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="360a1215dccb403d17e9cb9934434e31e4b29b80">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\zxing_67dcf3f33c3a4fb83ad0cc4d08b9ad343731661b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\cn.yipianfengye.android\zxing-library\2.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="97e7daa2ee778fe5829b88c6d7c1276544235e9e">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\cn.yipianfengye.android-zxing-library-2.1_a30fbdd2169266b832e63d80e0c6370e8a755158.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e820b7be8c035dd522da4bc822e8a76c8e27921a">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-25.2.0_ec0749fc9f56d3aaed19c4131b9d288d4bafb3c9.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.2.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.2"
+        sha1="cb454b52545859ed2f24a6c01366805b0fa04b22">
+        <dex dex="D:\lj_xwl\AndroidProject\ShareBikeDataCollect\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-25.2.0_c83bdf214bbf827b08e9c479c21a298214f4b884.jar" />
     </item>
 
 </items>
