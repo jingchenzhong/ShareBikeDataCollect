@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class Utils {
 
     private static ArrayList<Marker> markers = new ArrayList<Marker>();
-    private static BitmapDescriptor bitmapDescriptor;
+    public static BitmapDescriptor bitmapDescriptor;
     public static boolean isMarkbike;
 
     /**

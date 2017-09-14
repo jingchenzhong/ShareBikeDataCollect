@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private Toolbar toolbar;
 
     private ValueAnimator animator = null;//坐标动画
-    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, bigIdentificationBitmap,bigredpacageBitmap;//定位圆点、可移动、所有标识（车）
+    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, bigIdentificationBitmap, bigredpacageBitmap;//定位圆点、可移动、所有标识（车）
     private RouteSearch mRouteSearch;
 
     private WalkRouteResult mWalkRouteResult;
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         bigIdentificationBitmap = BitmapDescriptorFactory
                 .fromResource(com.hnulab.sharebike.em.R.drawable.stable_cluster_marker_one_select);
         bigredpacageBitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.markerred_package_big);
+                .fromResource(R.drawable.marker_red_package_big);
     }
 
     private void initId() {
@@ -360,11 +360,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mStartPoint = new LatLonPoint(mRecordPositon.latitude, mRecordPositon.longitude);
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
-                        if (Utils.isMarkbike==true){
+//                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
+
+                        if (Utils.bitmapDescriptor.equals(BitmapDescriptorFactory
+                                .fromResource(R.drawable.stable_cluster_marker_one_normal))) {
 
                             marker.setIcon(bigIdentificationBitmap);
-                        }else if (Utils.isMarkbike==false){
+                        } else if (Utils.bitmapDescriptor.equals(BitmapDescriptorFactory
+                                .fromResource(R.drawable.marker_red_package))) {
                             marker.setIcon(bigredpacageBitmap);
                         }
                         marker.setPosition(marker.getPosition());
@@ -531,8 +534,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                                        BluetoothReceiver.BLUETOOTH_NAME="HC-05";
 //                                        BluetoothReceiver.BLUETOOTH_PIN="1234";
 //                BluetoothConnect();
-                                        Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-                                        startActivityForResult(intent, REQUEST_CODE);
+                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
     }
@@ -823,13 +826,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             envDatas.add(envData);
         }
         //如果缓存数据已经有100条
-        if (envDatas.size() == 100&& isUpload ==false) {
-            isUpload=true;
+        if (envDatas.size() == 100 && isUpload == false) {
+            isUpload = true;
             /**
-                 * description:传数据到服务器
-                 * auther：xuewenliao
-                 * time：2017/9/13 21:07
-                 */
+             * description:传数据到服务器
+             * auther：xuewenliao
+             * time：2017/9/13 21:07
+             */
             Log.i("server", "come");
             Thread loginThread = new Thread(new SendDataThread());
             loginThread.start();
@@ -839,7 +842,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
     }
 
-    class SendDataThread implements Runnable{
+    class SendDataThread implements Runnable {
 
         @Override
         public void run() {
@@ -857,13 +860,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
     }
 
-    private  Callback.CommonCallback<String> callback = new Callback.CommonCallback<String>() {
+    private Callback.CommonCallback<String> callback = new Callback.CommonCallback<String>() {
         @Override
         public void onSuccess(String result) {
             Log.i("server", "REGISTER_SUCCESS");
             envDatas.clear();
             Log.i("server", "clear");
-            isUpload =false;
+            isUpload = false;
             System.out.print(1);
 
             //接收数据
