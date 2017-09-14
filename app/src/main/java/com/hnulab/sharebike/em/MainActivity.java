@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private boolean isUpload = false;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -360,16 +361,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mStartPoint = new LatLonPoint(mRecordPositon.latitude, mRecordPositon.longitude);
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
+                        //// TODO: 2017/9 判断图片
                         ArrayList<BitmapDescriptor> icons = marker.getIcons();
-
-                        if (Utils.bitmapDescriptor.equals(BitmapDescriptorFactory
-                                .fromResource(R.drawable.stable_cluster_marker_one_normal))) {
-
+                        if (icons.get(0).equals(Utils.bitmapBike)) {//如果图片一辆车
                             marker.setIcon(bigIdentificationBitmap);
-                        } else if (Utils.bitmapDescriptor.equals(BitmapDescriptorFactory
-                                .fromResource(R.drawable.marker_red_package))) {
+                        } else {
                             marker.setIcon(bigredpacageBitmap);
                         }
+
                         marker.setPosition(marker.getPosition());
                         searchRouteResult(ROUTE_TYPE_WALK, RouteSearch.WalkDefault);//出行路线规划
 //                        Intent intent = new Intent(MainActivity.this, RouteActivity.class);
