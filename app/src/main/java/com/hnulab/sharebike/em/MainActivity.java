@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private Toolbar toolbar;
 
     private ValueAnimator animator = null;//坐标动画
-    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, bigIdentificationBitmap;//定位圆点、可移动、所有标识（车）
+    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, bigIdentificationBitmap,bigredpacageBitmap;//定位圆点、可移动、所有标识（车）
     private RouteSearch mRouteSearch;
 
     private WalkRouteResult mWalkRouteResult;
@@ -249,6 +249,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 .fromResource(com.hnulab.sharebike.em.R.drawable.stable_cluster_marker_one_normal);
         bigIdentificationBitmap = BitmapDescriptorFactory
                 .fromResource(com.hnulab.sharebike.em.R.drawable.stable_cluster_marker_one_select);
+        bigredpacageBitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.markerred_package_big);
     }
 
     private void initId() {
@@ -358,7 +360,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mStartPoint = new LatLonPoint(mRecordPositon.latitude, mRecordPositon.longitude);
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-                        marker.setIcon(bigIdentificationBitmap);
+                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
+                        if (Utils.isMarkbike==true){
+
+                            marker.setIcon(bigIdentificationBitmap);
+                        }else if (Utils.isMarkbike==false){
+                            marker.setIcon(bigredpacageBitmap);
+                        }
                         marker.setPosition(marker.getPosition());
                         searchRouteResult(ROUTE_TYPE_WALK, RouteSearch.WalkDefault);//出行路线规划
 //                        Intent intent = new Intent(MainActivity.this, RouteActivity.class);
@@ -721,6 +729,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 .search(mStartPosition.latitude, mStartPosition.longitude);
 //        Utils.removeMarkers();
         if (mIsFirst) {
+            // TODO: 2017/9/14 模拟加车  模拟加红包
             Utils.addEmulateData(aMap, mStartPosition);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_scan_code.setVisibility(View.VISIBLE);

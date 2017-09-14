@@ -31,16 +31,27 @@ import java.util.ArrayList;
 public class Utils {
 
     private static ArrayList<Marker> markers = new ArrayList<Marker>();
+    private static BitmapDescriptor bitmapDescriptor;
+    public static boolean isMarkbike;
 
     /**
      * 添加模拟测试的车的点
      */
     public static void addEmulateData(AMap amap, LatLng center) {
         if (markers.size() == 0) {
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory
-                    .fromResource(R.drawable.stable_cluster_marker_one_normal);
+//            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory
+//                    .fromResource(R.drawable.stable_cluster_marker_one_normal);
 
             for (int i = 0; i < 20; i++) {
+                if (i%3==0){
+                    isMarkbike=true;
+                    bitmapDescriptor = BitmapDescriptorFactory
+                            .fromResource(R.drawable.stable_cluster_marker_one_normal);
+                }else{
+                    isMarkbike=false;
+                    bitmapDescriptor = BitmapDescriptorFactory
+                            .fromResource(R.drawable.marker_red_package);
+                }
                 double latitudeDelt;
                 double longtitudeDelt;
                 if(i%2==0) {
