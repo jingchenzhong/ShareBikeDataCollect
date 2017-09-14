@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             Log.e(TAG, "点击的Marker");
             Log.e(TAG, marker.getPosition() + "");
             isClickIdentification = true;
+            // TODO: 2017/9/14 点击Markerbug
             if (tempMark != null) {
 //                icons = marker.getIcons();
 //                if (icons.get(0).equals(Utils.bitmapBike)){//如果图片一辆车
@@ -355,7 +356,20 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                }else{
 //                    tempMark.setIcon(smallredpacageBitmap);
 //                }
-                tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
+//                tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
+
+                //遍历点，恢复点对应图标
+                ArrayList<Marker> markers = Utils.markers;
+                    for (Marker marker1 : markers) {
+                        if (marker1.equals(tempMark)) {
+                            if (marker1.getIcons().get(0).equals(bigIdentificationBitmap)) {
+                                tempMark.setIcon(smallIdentificationBitmap);
+                            }else{
+                                tempMark.setIcon(smallredpacageBitmap);
+                            }
+                        }
+                    }
+
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
             }
