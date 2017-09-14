@@ -708,7 +708,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         }
                         n++;
                     }
-                    // TODO: 2017/9/13 CO2 数据获取
+                    //CO2 数据获取
                     co2_data = new String(buffer_new, 0, n - 1);
 
                     Log.i("Co2", "浓度：-->" + co2_data);
