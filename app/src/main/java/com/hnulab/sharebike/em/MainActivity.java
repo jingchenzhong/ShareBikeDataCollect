@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mStartPoint = new LatLonPoint(mRecordPositon.latitude, mRecordPositon.longitude);
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-//                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
+                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
 
                         if (Utils.bitmapDescriptor.equals(BitmapDescriptorFactory
                                 .fromResource(R.drawable.stable_cluster_marker_one_normal))) {
