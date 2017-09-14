@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private Toolbar toolbar;
 
     private ValueAnimator animator = null;//坐标动画
-    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, bigIdentificationBitmap, bigredpacageBitmap;//定位圆点、可移动、所有标识（车）
+    private BitmapDescriptor initBitmap, moveBitmap, smallIdentificationBitmap, smallredpacageBitmap, bigIdentificationBitmap, bigredpacageBitmap;//定位圆点、可移动、所有标识（车）
     private RouteSearch mRouteSearch;
 
     private WalkRouteResult mWalkRouteResult;
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
     private List<EnvData> envDatas = new ArrayList<>();
     private boolean isUpload = false;
-
+    private ArrayList<BitmapDescriptor> icons;
 
 
     @Override
@@ -252,6 +252,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 .fromResource(com.hnulab.sharebike.em.R.drawable.stable_cluster_marker_one_select);
         bigredpacageBitmap = BitmapDescriptorFactory
                 .fromResource(R.drawable.marker_red_package_big);
+        smallredpacageBitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.marker_red_package);
     }
 
     private void initId() {
@@ -346,12 +348,21 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             Log.e(TAG, marker.getPosition() + "");
             isClickIdentification = true;
             if (tempMark != null) {
+//                icons = marker.getIcons();
+//                if (icons.get(0).equals(Utils.bitmapBike)){//如果图片一辆车
+//
+//                    tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
+//                }else{
+//                    tempMark.setIcon(smallredpacageBitmap);
+//                }
                 tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
             }
             startAnim(marker);
             new Thread(new Runnable() {
+
+
                 @Override
                 public void run() {
                     try {
@@ -362,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
                         //// TODO: 2017/9 判断图片
-                        ArrayList<BitmapDescriptor> icons = marker.getIcons();
+                        icons = marker.getIcons();
                         if (icons.get(0).equals(Utils.bitmapBike)) {//如果图片一辆车
                             marker.setIcon(bigIdentificationBitmap);
                         } else {
@@ -1051,13 +1062,33 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
     }
 
+    /**
+     * 点击map后事件处理
+     */
     private void clickInitInfo() {
         isClickIdentification = false;
+
+        //遍历点，恢复点对应图标
+        ArrayList<Marker> markers = Utils.markers;
         if (null != tempMark) {
-            tempMark.setIcon(smallIdentificationBitmap);
+            for (Marker marker : markers) {
+                if (marker.equals(tempMark)) {
+                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
+                        tempMark.setIcon(smallIdentificationBitmap);
+                    }else{
+                        tempMark.setIcon(smallredpacageBitmap);
+                    }
+                }
+            }
             tempMark.hideInfoWindow();
             tempMark = null;
         }
+//        if (null != tempMark) {
+//            // TODO: 2017/9/14 点击初始化图标
+//            tempMark.setIcon(smallIdentificationBitmap);
+//            tempMark.hideInfoWindow();
+//            tempMark = null;
+//        }
         if (null != walkRouteOverlay) {
             walkRouteOverlay.removeFromMap();
         }

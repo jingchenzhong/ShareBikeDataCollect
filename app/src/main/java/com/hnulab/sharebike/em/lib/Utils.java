@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class Utils {
 
-          private static ArrayList<Marker> markers = new ArrayList<Marker>();
+          public static ArrayList<Marker> markers = new ArrayList<Marker>();
           public static BitmapDescriptor bitmapDescriptor;
           public static boolean isMarkbike;
           //车的对象
@@ -39,6 +39,9 @@ public class Utils {
           //红包的对象
           public  static BitmapDescriptor bitmapPackage = BitmapDescriptorFactory
                .fromResource(R.drawable.marker_red_package);
+
+
+
 
           /**
            * 添加模拟测试的车的点
