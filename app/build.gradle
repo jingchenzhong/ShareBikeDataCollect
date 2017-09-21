@@ -55,4 +55,6 @@ dependencies {
     compile 'com.lzy.widget:imagepicker:0.5.4'
     compile 'org.xutils:xutils:3.5.0'
     compile 'com.google.code.gson:gson:2.8.1'
+    //popWindow
+    compile 'com.github.razerdp:BasePopup:1.8.1'
 }

@@ -66,6 +66,7 @@ import com.hnulab.sharebike.em.base.EnvData;
 import com.hnulab.sharebike.em.broadcast.BluetoothReceiver;
 import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 import com.hnulab.sharebike.em.dialog.LoadDialog;
+import com.hnulab.sharebike.em.dialog.RedpackageDialog;
 import com.hnulab.sharebike.em.lib.LocationTask;
 import com.hnulab.sharebike.em.lib.OnLocationGetListener;
 import com.hnulab.sharebike.em.lib.PositionEntity;
@@ -349,14 +350,6 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             isClickIdentification = true;
             // TODO: 2017/9/14 点击Markerbug
             if (tempMark != null) {
-//                icons = marker.getIcons();
-//                if (icons.get(0).equals(Utils.bitmapBike)){//如果图片一辆车
-//
-//                    tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
-//                }else{
-//                    tempMark.setIcon(smallredpacageBitmap);
-//                }
-//                tempMark.setIcon(smallIdentificationBitmap);//点击时的图标
 
                 //遍历点，恢复点对应图标
                 ArrayList<Marker> markers = Utils.markers;
@@ -386,11 +379,16 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         mStartPoint = new LatLonPoint(mRecordPositon.latitude, mRecordPositon.longitude);
                         mPositionMark.setPosition(mRecordPositon);
                         mEndPoint = new LatLonPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-                        //// TODO: 2017/9 判断图片
+                        // TODO: 2017/9 判断图片
                         icons = marker.getIcons();
                         if (icons.get(0).equals(Utils.bitmapBike)) {//如果图片一辆车
                             marker.setIcon(bigIdentificationBitmap);
                         } else {
+                            //弹出一个Dialog
+                            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+                            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+                            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+
                             marker.setIcon(bigredpacageBitmap);
                         }
 
@@ -756,11 +754,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 .search(mStartPosition.latitude, mStartPosition.longitude);
 //        Utils.removeMarkers();
         if (mIsFirst) {
-            // TODO: 2017/9/14 模拟加车  模拟加红包
+            // TODO: 2017/9/14 实现：
+            // 1、实际红包和实际车辆；2、改为传三个参数：地图、LatLng集合（经度坐标、纬度坐标、红包是否已抢标志）
             Utils.addEmulateData(aMap, mStartPosition);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_scan_code.setVisibility(View.VISIBLE);
-            createInitialPosition(cameraPosition.target.latitude, cameraPosition.target.longitude);
+            createInitialPosition(cameraPosition.target.latitude, cameraPosition.target.longitude);//当前经纬度
             createMovingPosition();
             mIsFirst = false;
         }
@@ -851,6 +850,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
         //如果缓存数据已经有100条
         if (envDatas.size() == 100 && isUpload == false) {
+            // TODO: 2017/9/14 线程锁处理
             isUpload = true;
             /**
              * description:传数据到服务器
@@ -1097,17 +1097,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             tempMark.hideInfoWindow();
             tempMark = null;
         }
-//        if (null != tempMark) {
-//            // TODO: 2017/9/14 点击初始化图标
-//            tempMark.setIcon(smallIdentificationBitmap);
-//            tempMark.hideInfoWindow();
-//            tempMark = null;
-//        }
         if (null != walkRouteOverlay) {
             walkRouteOverlay.removeFromMap();
         }
     }
 
+    // TODO: 2017/9/20 点击图标后信息的显示
     @Override
     public View getInfoWindow(Marker marker) {
         Log.e(TAG, "getInfoWindow");
