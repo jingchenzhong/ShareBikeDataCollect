@@ -30,4 +30,6 @@
     <!--主界面标题文字的颜色-->
     <color name="titleText">#fdd800</color>
     <color name="popup_line_bg">#CDCDCD</color>
+    <!--红包Dialog-->
+    <color name="redtitleText">#dcbb83</color>
 </resources>
