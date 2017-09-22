@@ -178,7 +178,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
     public String key = "";
     //当前二氧化碳浓度
-    private String co2_data;
+    private boolean isStartPick=false;
+    //最新环境数据
+    private EnvData envData=new EnvData();
     //蓝牙权限
     private int MY_PERMISSION_REQUEST_CONSTANT = 1;
 
@@ -420,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //解除蓝牙绑定
+        //TODO 解除蓝牙绑定
         try {
             BluetoothAutoConnectUtils.removeBond(_device);
             Log.e("removeBond", "onDestroy-->removeBond");
@@ -553,7 +555,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-//                                        BluetoothReceiver.BLUETOOTH_NAME="HC-05";
+//                                        BluetoothReceiver.BLUETOOTH_ADDRESS="20:16:07:04:66:09";
 //                                        BluetoothReceiver.BLUETOOTH_PIN="1234";
 //                BluetoothConnect();
                 Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
@@ -583,11 +585,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         Toast.makeText(this, "解析失败", Toast.LENGTH_LONG).show();
                     } else {
                         // TODO: 2017/9/12 蓝牙解析回调
-                        String ping = datas[0].split("=")[1];
-                        String name = datas[1].split("=")[1];
-                        BluetoothReceiver.BLUETOOTH_NAME = name;
-                        BluetoothReceiver.BLUETOOTH_PIN = ping;
-//                                                            Toast.makeText(this, "ping："+ping+"\nname："+name, Toast.LENGTH_LONG).show();
+                        String pin = datas[0].split("=")[1];
+                        String address = datas[1].split("=")[1];
+                        BluetoothReceiver.BLUETOOTH_ADDRESS = address;
+                        BluetoothReceiver.BLUETOOTH_PIN = pin;
+                      Toast.makeText(this, "ping："+pin+"\naddress："+address, Toast.LENGTH_LONG).show();
                         //蓝牙连接
                         BluetoothConnect();
                     }
@@ -720,12 +722,28 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         }
                         n++;
                     }
-                    //CO2 数据获取
-                    co2_data = new String(buffer_new, 0, n - 1);
 
-                    Log.i("Co2", "浓度：-->" + co2_data);
+                    //获取数据
+                    String result= new String(buffer_new, 0, buffer_new.length-1).split("\n")[0];
+                   //数据按空格划分 ，PM按加号划分
+                    String[] split = result.split(" ");
+                    String[] mp_data = split[0].split("\\+");
+                    envData.setE_pm2_5(Double.parseDouble(mp_data[0]));
+                    envData.setE_pm5(Double.parseDouble(mp_data[1]));
+                    envData.setE_pm10(Double.parseDouble(mp_data[2]));
+                    //split[1]-->1602.29ppm
+                    envData.setE_humidity(Double.parseDouble(split[1].substring(0,split[1].length()-3)));
+                    //split[2]-->27.20C
+                    envData.setE_temperature(Double.parseDouble(split[2].substring(0,split[2].length()-1)));
+                    //split[3]-->67.3%
+                    envData.setE_co2(Double.parseDouble(split[3].substring(0,split[3].length()-1)));
+
+//                    Log.i("环境数据", "原始数据：-->" + result);
+//                    Log.i("环境数据", "浓度：-->" + envData.toString());
+                    //开始采集数据
+                    isStartPick=true;
                     //延迟1s
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
 //                                                  String[] split = s.split("\n");
 //                                                  if (split!=null) {
 //                                                            System.out.println("Co2浓度：-->"+split[0]);
@@ -828,16 +846,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         initLocation = mStartPosition;
         Log.e("onLocationGet", "onLocationGet" + mStartPosition);
         //如果环境监测数据不为空，则开始填充数据
-        if (co2_data != null) {
+        if (isStartPick) {
             //封装环境数据信息
-            EnvData envData = new EnvData();
             //获取当前时间
             Date curDate = new Date(System.currentTimeMillis());
-            envData.setE_latitfude(entity.latitue + "");
-            envData.setE_longitude(entity.longitude + "");
+            envData.setE_latitfude(entity.latitue);
+            envData.setE_longitude(entity.longitude);
             envData.setE_city(entity.city);
             envData.setE_address(entity.address);
-            envData.setE_co2(Integer.parseInt(co2_data));
             envData.setE_time(formatter.format(curDate));
             System.out.println(envData.getE_latitfude());
             System.out.println(envData.getE_longitude());
@@ -847,9 +863,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             System.out.println(envData.getE_address());
             //填充数据到集合
             envDatas.add(envData);
+            Log.e("envData", "数据：" + envData.toString());
         }
         //如果缓存数据已经有100条
-        if (envDatas.size() == 100 && isUpload == false) {
+        if (envDatas.size() == 50 && isUpload == false) {
             // TODO: 2017/9/14 线程锁处理
             isUpload = true;
             /**

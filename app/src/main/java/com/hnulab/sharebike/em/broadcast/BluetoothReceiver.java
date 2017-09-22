@@ -17,8 +17,8 @@ import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 
 public class BluetoothReceiver extends BroadcastReceiver {
 
-          public static String BLUETOOTH_PIN = "1234";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
-          public static String BLUETOOTH_NAME = "BLUETOOTH_NAME";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
+          public static String BLUETOOTH_PIN = "";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
+          public static String BLUETOOTH_ADDRESS = "";  //此处为你要连接的蓝牙设备的初始密钥，一般为1234或0000
           public static String EXTRA_DEVICE_ADDRESS = "address";
 
           //广播action
@@ -41,7 +41,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                     if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                               Log.e("发现设备:", "[" + btDevice.getName() + "]" + ":" + btDevice.getAddress());
                               //HC-05设备如果有多个，第一个搜到的那个会被尝试。
-                              if (btDevice.getName().contains(BLUETOOTH_NAME)) {
+                              if (btDevice.getAddress().contains(BLUETOOTH_ADDRESS)) {
                                         if (btDevice.getBondState() == BluetoothDevice.BOND_NONE) {
 
                                                   Log.e("ywq", "attemp to bond:" + "[" + btDevice.getName() + "]");
@@ -58,7 +58,7 @@ public class BluetoothReceiver extends BroadcastReceiver {
                               //再次得到的action，会等于PAIRING_REQUEST
                     } else if (action.equals("android.bluetooth.device.action.PAIRING_REQUEST")) {
                               Log.e("action2=", action);
-                              if (btDevice.getName().contains(BLUETOOTH_NAME)) {
+                              if (btDevice.getAddress().contains(BLUETOOTH_ADDRESS)) {
                                         Log.e("here", "OKOKOK");
 
                                         try {
