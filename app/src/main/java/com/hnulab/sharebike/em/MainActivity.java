@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
 
     //时间获取格式
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private List<EnvData> envDatas = new ArrayList<>();
     private boolean isUpload = false;

@@ -14,9 +14,13 @@ public class EnvData {
     //二氧化碳浓度 单位%
     double e_co2;
 
+    //时间
+    String e_time;
     //PM2.5
     double e_pm2_5;
 
+    //PM5
+    double e_pm5;
     //PM10
     double e_pm10;
     //湿度 单位PPM
@@ -27,10 +31,6 @@ public class EnvData {
     String e_address;
     //城市
     String e_city;
-    //时间
-    String e_time;
-    //PM5
-    double e_pm5;
 
     public double getE_longitude() {
         return e_longitude;
