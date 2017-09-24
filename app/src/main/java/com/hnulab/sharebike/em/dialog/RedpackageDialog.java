@@ -55,7 +55,7 @@ public class RedpackageDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getDialog().setCanceledOnTouchOutside(false);//点击背景不能Dialog不消失
+        getDialog().setCanceledOnTouchOutside(false);//点击背景Dialog不消失
         view = inflater.inflate(R.layout.popup_redpackage, container);
         initView();
         setEvent();
