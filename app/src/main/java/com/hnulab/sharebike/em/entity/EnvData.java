@@ -1,4 +1,4 @@
-package com.hnulab.sharebike.em.base;
+package com.hnulab.sharebike.em.entity;
 
 /**
  * Description：
@@ -6,7 +6,7 @@ package com.hnulab.sharebike.em.base;
  * E-mail：luojie@hnu.edu.cn
  * Time：2017/9/12 19:30
  */
-public class EnvData {
+public class EnvData implements Cloneable{
     //经度
     double e_longitude;
     //纬度
@@ -136,6 +136,9 @@ public class EnvData {
              '}';
     }
 
-
-
+    @Override
+    public EnvData clone() throws CloneNotSupportedException {
+        EnvData cloned = (EnvData) super.clone();
+        return cloned;
+    }
 }

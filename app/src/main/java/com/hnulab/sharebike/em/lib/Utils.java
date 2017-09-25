@@ -30,73 +30,67 @@ import java.util.ArrayList;
  */
 public class Utils {
 
-          public static ArrayList<Marker> markers = new ArrayList<Marker>();
-          public static BitmapDescriptor bitmapDescriptor;
-          public static boolean isMarkbike;
-          //车的对象
-          public static BitmapDescriptor bitmapBike = BitmapDescriptorFactory
-               .fromResource(R.drawable.stable_cluster_marker_one_normal);
-          //红包的对象
-          public  static BitmapDescriptor bitmapPackage = BitmapDescriptorFactory
-               .fromResource(R.drawable.marker_red_package);
+    public static ArrayList<Marker> markers = new ArrayList<Marker>();
+    public static BitmapDescriptor bitmapDescriptor;
+    public static boolean isMarkbike;
+    //车的对象
+    public static BitmapDescriptor bitmapBike = BitmapDescriptorFactory
+            .fromResource(R.drawable.stable_cluster_marker_one_normal);
+    //红包的对象
+    public static BitmapDescriptor bitmapPackage = BitmapDescriptorFactory
+            .fromResource(R.drawable.marker_red_package);
 
 
+    /**
+     * 添加模拟测试的车的点
+     */
+    public static void addEmulateData(AMap amap, LatLng center) {
+        if (markers.size() == 0) {
 
+            for (int i = 0; i < 20; i++) {
+                if (i % 3 == 0) {
+                    isMarkbike = true;
+                    bitmapDescriptor = bitmapBike;
+                } else {
+                    isMarkbike = false;
+                    bitmapDescriptor = bitmapPackage;
+                }
+                double latitudeDelt;
+                double longtitudeDelt;
+                if (i % 2 == 0) {
+                    latitudeDelt = (Math.random() - 0.5) * 0.1;
+                    longtitudeDelt = (Math.random() - 0.5) * 0.1;
+                } else {
+                    latitudeDelt = (Math.random() - 0.5) * 0.01;
+                    longtitudeDelt = (Math.random() - 0.5) * 0.01;
+                }
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(bitmapDescriptor);
 
-          /**
-           * 添加模拟测试的车的点
-           */
-          public static void addEmulateData(AMap amap, LatLng center) {
-                    if (markers.size() == 0) {
-//            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory
-//                    .fromResource(R.drawable.stable_cluster_marker_one_normal);
+                markerOptions.position(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
+                Marker marker = amap.addMarker(markerOptions);
+                markers.add(marker);
+            }
+        } else {
+            for (Marker marker : markers) {
+                double latitudeDelt = (Math.random() - 0.5) * 0.1;
+                double longtitudeDelt = (Math.random() - 0.5) * 0.1;
+                marker.setPosition(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
 
-                              for (int i = 0; i < 20; i++) {
-                                        if (i % 3 == 0) {
-                                                  isMarkbike = true;
-                                                  bitmapDescriptor = bitmapBike;
-                                        } else {
-                                                  isMarkbike = false;
-                                                  bitmapDescriptor = bitmapPackage;
-                                        }
-                                        double latitudeDelt;
-                                        double longtitudeDelt;
-                                        if (i % 2 == 0) {
-                                                  latitudeDelt = (Math.random() - 0.5) * 0.1;
-                                                  longtitudeDelt = (Math.random() - 0.5) * 0.1;
-                                        } else {
-                                                  latitudeDelt = (Math.random() - 0.5) * 0.01;
-                                                  longtitudeDelt = (Math.random() - 0.5) * 0.01;
-                                        }
-                                        MarkerOptions markerOptions = new MarkerOptions();
-//                markerOptions.setFlat(true);
-//                markerOptions.anchor(0.5f, 0.5f);
-                                        markerOptions.icon(bitmapDescriptor);
+            }
+        }
+    }
 
-                                        markerOptions.position(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
-                                        Marker marker = amap.addMarker(markerOptions);
-                                        markers.add(marker);
-                              }
-                    } else {
-                              for (Marker marker : markers) {
-                                        double latitudeDelt = (Math.random() - 0.5) * 0.1;
-                                        double longtitudeDelt = (Math.random() - 0.5) * 0.1;
-                                        marker.setPosition(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
-
-                              }
-                    }
-          }
-
-          /**
-           * 移除marker
-           */
-          public static void removeMarkers() {
-                    for (Marker marker : markers) {
-                              marker.remove();
-                              marker.destroy();
-                    }
-                    markers.clear();
-          }
+    /**
+     * 移除marker
+     */
+    public static void removeMarkers() {
+        for (Marker marker : markers) {
+            marker.remove();
+            marker.destroy();
+        }
+        markers.clear();
+    }
 
 }
   

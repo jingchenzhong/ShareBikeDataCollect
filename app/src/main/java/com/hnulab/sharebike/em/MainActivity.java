@@ -14,6 +14,8 @@ import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -55,6 +57,7 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkPath;
 import com.amap.api.services.route.WalkRouteResult;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hnulab.sharebike.em.activity.DestinationActivity;
 import com.hnulab.sharebike.em.activity.LoginActivity;
 import com.hnulab.sharebike.em.activity.MyMessageActivity;
@@ -62,14 +65,16 @@ import com.hnulab.sharebike.em.activity.MyTripActivity;
 import com.hnulab.sharebike.em.activity.MyWalletActivity;
 import com.hnulab.sharebike.em.activity.PersonalInformationActivity;
 import com.hnulab.sharebike.em.activity.UserKnowActivity;
-import com.hnulab.sharebike.em.base.EnvData;
 import com.hnulab.sharebike.em.broadcast.BluetoothReceiver;
 import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 import com.hnulab.sharebike.em.dialog.LoadDialog;
 import com.hnulab.sharebike.em.dialog.RedpackageDialog;
+import com.hnulab.sharebike.em.entity.EnvData;
+import com.hnulab.sharebike.em.entity.RedPackageLocation;
 import com.hnulab.sharebike.em.lib.LocationTask;
 import com.hnulab.sharebike.em.lib.OnLocationGetListener;
 import com.hnulab.sharebike.em.lib.PositionEntity;
+import com.hnulab.sharebike.em.lib.PutRedpackageUtils;
 import com.hnulab.sharebike.em.lib.RegeocodeTask;
 import com.hnulab.sharebike.em.lib.RouteTask;
 import com.hnulab.sharebike.em.lib.Sha1;
@@ -80,7 +85,6 @@ import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 import com.hnulab.sharebike.em.util.CommonUtils;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
-import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.xutils.common.Callback;
@@ -89,6 +93,7 @@ import org.xutils.x;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -178,9 +183,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
     public String key = "";
     //当前二氧化碳浓度
-    private boolean isStartPick=false;
+    private boolean isStartPick = false;
     //最新环境数据
-    private EnvData envData=new EnvData();
+    private static EnvData envData = new EnvData();
     //蓝牙权限
     private int MY_PERMISSION_REQUEST_CONSTANT = 1;
 
@@ -192,6 +197,28 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private boolean isUpload = false;
     private ArrayList<BitmapDescriptor> icons;
 
+    private enum handler_key {
+        //数据上传成功
+        UPLOADSUCCESS,
+        //不在采集范围
+        OUYOFPALACE,
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            handler_key key = handler_key.values()[msg.what];
+            switch (key) {
+                case UPLOADSUCCESS:
+                    ToastUtil.show(MainActivity.this, "数据上传成功");
+                    break;
+                case OUYOFPALACE:
+                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围");
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -355,15 +382,15 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
                 //遍历点，恢复点对应图标
                 ArrayList<Marker> markers = Utils.markers;
-                    for (Marker marker1 : markers) {
-                        if (marker1.equals(tempMark)) {
-                            if (marker1.getIcons().get(0).equals(bigIdentificationBitmap)) {
-                                tempMark.setIcon(smallIdentificationBitmap);
-                            }else{
-                                tempMark.setIcon(smallredpacageBitmap);
-                            }
+                for (Marker marker1 : markers) {
+                    if (marker1.equals(tempMark)) {
+                        if (marker1.getIcons().get(0).equals(bigIdentificationBitmap)) {
+                            tempMark.setIcon(smallIdentificationBitmap);
+                        } else {
+                            tempMark.setIcon(smallredpacageBitmap);
                         }
                     }
+                }
 
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
@@ -555,11 +582,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-//                                        BluetoothReceiver.BLUETOOTH_ADDRESS="20:16:07:04:66:09";
-//                                        BluetoothReceiver.BLUETOOTH_PIN="1234";
-//                BluetoothConnect();
-                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
+                BluetoothReceiver.BLUETOOTH_PIN = "1234";
+                BluetoothConnect();
+//                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+//                startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
     }
@@ -589,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         String address = datas[1].split("=")[1];
                         BluetoothReceiver.BLUETOOTH_ADDRESS = address;
                         BluetoothReceiver.BLUETOOTH_PIN = pin;
-                      Toast.makeText(this, "ping："+pin+"\naddress："+address, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "ping：" + pin + "\naddress：" + address, Toast.LENGTH_LONG).show();
                         //蓝牙连接
                         BluetoothConnect();
                     }
@@ -724,24 +751,24 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     }
 
                     //获取数据
-                    String result= new String(buffer_new, 0, buffer_new.length-1).split("\n")[0];
-                   //数据按空格划分 ，PM按加号划分
+                    String result = new String(buffer_new, 0, buffer_new.length - 1).split("\n")[0];
+                    //数据按空格划分 ，PM按加号划分
                     String[] split = result.split(" ");
                     String[] mp_data = split[0].split("\\+");
                     envData.setE_pm2_5(Double.parseDouble(mp_data[0]));
                     envData.setE_pm5(Double.parseDouble(mp_data[1]));
                     envData.setE_pm10(Double.parseDouble(mp_data[2]));
                     //split[1]-->1602.29ppm
-                    envData.setE_humidity(Double.parseDouble(split[1].substring(0,split[1].length()-3)));
+                    envData.setE_humidity(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
                     //split[2]-->27.20C
-                    envData.setE_temperature(Double.parseDouble(split[2].substring(0,split[2].length()-1)));
+                    envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
                     //split[3]-->67.3%
-                    envData.setE_co2(Double.parseDouble(split[3].substring(0,split[3].length()-1)));
+                    envData.setE_co2(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
 
 //                    Log.i("环境数据", "原始数据：-->" + result);
 //                    Log.i("环境数据", "浓度：-->" + envData.toString());
                     //开始采集数据
-                    isStartPick=true;
+                    isStartPick = true;
                     //延迟1s
                     Thread.sleep(2000);
 //                                                  String[] split = s.split("\n");
@@ -774,7 +801,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         if (mIsFirst) {
             // TODO: 2017/9/14 实现：
             // 1、实际红包和实际车辆；2、改为传三个参数：地图、LatLng集合（经度坐标、纬度坐标、红包是否已抢标志）
-            Utils.addEmulateData(aMap, mStartPosition);
+
+            new Thread(new RedLocation()).start();
+
+
+//            Utils.addEmulateData(aMap, mStartPosition);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_scan_code.setVisibility(View.VISIBLE);
             createInitialPosition(cameraPosition.target.latitude, cameraPosition.target.longitude);//当前经纬度
@@ -791,6 +822,50 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             }
         }
     }
+
+    //获取红包经纬度子线程
+    class RedLocation implements Runnable {
+
+        @Override
+        public void run() {
+            RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/get_redpackage_data/");
+            params.addHeader("Content-type", "application/json");
+            params.setCharset("UTF-8");
+
+
+            x.http().get(params, redLocationCallback);
+
+        }
+    }
+
+    private Callback.CommonCallback<String> redLocationCallback = new Callback.CommonCallback<String>() {
+
+        @Override
+        public void onSuccess(String result) {
+            String jsonBack = result;
+            Type type = new TypeToken<List<RedPackageLocation>>() {
+            }.getType();
+            List<RedPackageLocation> redPackageLocations = new Gson().fromJson(jsonBack, type);
+            PutRedpackageUtils.addEmulateData(aMap,mStartPosition,redPackageLocations);
+            Log.i("red", redPackageLocations.toString());
+            Log.i("red", "success");
+        }
+
+        @Override
+        public void onError(Throwable ex, boolean isOnCallback) {
+
+        }
+
+        @Override
+        public void onCancelled(CancelledException cex) {
+
+        }
+
+        @Override
+        public void onFinished() {
+
+        }
+    };
 
 
     /**
@@ -847,6 +922,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         Log.e("onLocationGet", "onLocationGet" + mStartPosition);
         //如果环境监测数据不为空，则开始填充数据
         if (isStartPick) {
+            EnvData clone = null;
             //封装环境数据信息
             //获取当前时间
             Date curDate = new Date(System.currentTimeMillis());
@@ -855,6 +931,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             envData.setE_city(entity.city);
             envData.setE_address(entity.address);
             envData.setE_time(formatter.format(curDate));
+            try {
+                clone = envData.clone();
+
+
+            } catch (Exception e) {
+            }
             System.out.println(envData.getE_latitfude());
             System.out.println(envData.getE_longitude());
             System.out.println(envData.getE_time());
@@ -862,11 +944,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             System.out.println(envData.getE_city());
             System.out.println(envData.getE_address());
             //填充数据到集合
-            envDatas.add(envData);
-            Log.e("envData", "数据：" + envData.toString());
+            envDatas.add(clone);
+            Log.e("envData", "数据：" + clone.toString());
         }
         //如果缓存数据已经有100条
-        if (envDatas.size() == 50 && isUpload == false) {
+        if (envDatas.size() == 10 && isUpload == false) {
             // TODO: 2017/9/14 线程锁处理
             isUpload = true;
             /**
@@ -877,9 +959,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             Log.i("server", "come");
             Thread loginThread = new Thread(new SendDataThread());
             loginThread.start();
+
+            Message msg = new Message();
+            msg.what = handler_key.UPLOADSUCCESS.ordinal();
+            handler.sendMessage(msg);
             Log.i("server", "start");
 
         }
+
 
     }
 
@@ -919,16 +1006,27 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
+            //坐标没在湖师大在此处接收数据
+            Message msg = new Message();
+            msg.what = handler_key.OUYOFPALACE.ordinal();
+            handler.sendMessage(msg);
+
+            envDatas.clear();
+            isUpload = false;
             Log.i("server", "CONNECT_FAIL");
         }
 
         @Override
         public void onCancelled(CancelledException cex) {
+            envDatas.clear();
+            isUpload = false;
             Log.i("server", "onCancelled");
         }
 
         @Override
         public void onFinished() {
+            envDatas.clear();
+            isUpload = false;
             Log.i("server", "onFinished");
         }
     };
@@ -1106,7 +1204,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 if (marker.equals(tempMark)) {
                     if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
                         tempMark.setIcon(smallIdentificationBitmap);
-                    }else{
+                    } else {
                         tempMark.setIcon(smallredpacageBitmap);
                     }
                 }
