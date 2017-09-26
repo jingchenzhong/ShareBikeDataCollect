@@ -205,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         UPLOADSUCCESS,
         //主动上传数据成功
         REDUPLOADSUCCESS,
+        //主动上传数据失败（测试用）
+        REDUPLOADFAIL,
         //不在采集范围
         OUYOFPALACE,
         //不在获取红包范围内
@@ -223,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     break;
                 case REDUPLOADSUCCESS:
                     ToastUtil.show(MainActivity.this, "红包所在地数据上传成功");
+                    break;
+                case REDUPLOADFAIL:
+                    ToastUtil.show(MainActivity.this, "红包所在地上传数据失败");
                     break;
                 case OUYOFPALACE:
                     ToastUtil.show(MainActivity.this, "您当前位置不在采集范围");
@@ -490,9 +495,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                                }
 
                                 //弹出一个Dialog
-                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+//                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+//                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+//                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
 
                             } else {
                                 Message msg = new Message();
@@ -573,11 +578,18 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         @Override
         public void onSuccess(String result) {
             redDatas.clear();
+            //弹出一个Dialog
+            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
 //            isUpload = false;
         }
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
+            Message msg = new Message();
+            msg.what = handler_key.REDUPLOADFAIL.ordinal();
+            handler.sendMessage(msg);
             redDatas.clear();
         }
 
