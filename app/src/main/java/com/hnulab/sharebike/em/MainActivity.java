@@ -83,6 +83,7 @@ import com.hnulab.sharebike.em.overlay.WalkRouteOverlay;
 import com.hnulab.sharebike.em.util.AMapUtil;
 import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 import com.hnulab.sharebike.em.util.CommonUtils;
+import com.hnulab.sharebike.em.util.Distance;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -193,15 +194,22 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     //时间获取格式
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private List<EnvData> envDatas = new ArrayList<>();
-    private boolean isUpload = false;
+    private List<EnvData> envDatas = new ArrayList<>();//自动传数据集合
+    private List<EnvData> redDatas = new ArrayList<>();//主动传数据集合
+    private boolean isUpload = false;//上传数据标志位（锁功能）
     private ArrayList<BitmapDescriptor> icons;
+    private List<RedPackageLocation> redPackageLocations;
 
     private enum handler_key {
-        //数据上传成功
+        //自动上传数据成功
         UPLOADSUCCESS,
+        //主动上传数据成功
+        REDUPLOADSUCCESS,
         //不在采集范围
         OUYOFPALACE,
+        //不在获取红包范围内
+        OUTOFREDRANGE,
+
     }
 
     Handler handler = new Handler() {
@@ -213,8 +221,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 case UPLOADSUCCESS:
                     ToastUtil.show(MainActivity.this, "数据上传成功");
                     break;
+                case REDUPLOADSUCCESS:
+                    ToastUtil.show(MainActivity.this, "红包所在地数据上传成功");
+                    break;
                 case OUYOFPALACE:
                     ToastUtil.show(MainActivity.this, "您当前位置不在采集范围");
+                    break;
+                case OUTOFREDRANGE:
+                    ToastUtil.show(MainActivity.this, "您不在红包获取范围");
                     break;
             }
         }
@@ -398,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             startAnim(marker);
             new Thread(new Runnable() {
 
-
                 @Override
                 public void run() {
                     try {
@@ -413,22 +426,84 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         if (icons.get(0).equals(Utils.bitmapBike)) {//如果图片一辆车
                             marker.setIcon(bigIdentificationBitmap);
                         } else {
-                            //弹出一个Dialog
-                            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-                            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-                            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
 
-                            marker.setIcon(bigredpacageBitmap);
+                            /**
+                             * description:判断点击的红包位置和用户当前位置的距离，若用户所在位置处于红包半径的规定范围内，则可以点击。
+                             * marker.getPosition().latitude:点击的红包经纬度
+                             * mStartPoint.getLatitude():当前经纬度
+                             * radius:获取红包半径
+                             * distance：用户与红包距离
+                             * auther：xuewenliao
+                             * time：2017/9/26 9:37
+                             */
+                            double radius = Distance.GetRadius(redPackageLocations);
+                            Log.i("radius", "radius:" + String.valueOf(radius));
+
+//                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude,marker.getPosition().latitude,marker.getPosition().longitude));
+                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
+                            Log.i("radius", "distance:" + String.valueOf(distance));
+
+                            if (distance < radius) {
+
+                                Thread redSendThread = new Thread(new RedSendThread());
+                                redSendThread.start();
+//                               new Thread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        try {
+//
+//                                            while (isStartPick) {
+//                                                //克隆数据
+//                                                EnvData clone = null;
+//
+//                                                try {
+//                                                    clone = envData.clone();
+//                                                } catch (CloneNotSupportedException e) {
+//                                                    e.printStackTrace();
+//                                                }
+//
+//                                                redDatas.add(clone);
+//                                                Thread.sleep(2000);
+//                                                if (redDatas.size() == 5) {
+//                                                    //主动发数据
+//                                                    new Thread(new SendRedCollectinThread()).start();
+//                                                    Message msg = new Message();
+//                                                    msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
+//                                                    handler.sendMessage(msg);
+//                                                }
+//                                                Log.i("redDatas", redDatas.toString());
+//                                            }
+//
+//
+//                                        } catch (Exception e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                }).start();
+
+//                                if (redDatas.size() == 5) {
+//                                    //主动发数据
+//                                    new Thread(new SendRedCollectinThread()).start();
+//                                    Message msg = new Message();
+//                                    msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
+//                                    handler.sendMessage(msg);
+//                                }
+
+                                //弹出一个Dialog
+                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+
+                            } else {
+                                Message msg = new Message();
+                                msg.what = handler_key.OUTOFREDRANGE.ordinal();
+                                handler.sendMessage(msg);
+                            }
+
                         }
 
                         marker.setPosition(marker.getPosition());
                         searchRouteResult(ROUTE_TYPE_WALK, RouteSearch.WalkDefault);//出行路线规划
-//                        Intent intent = new Intent(MainActivity.this, RouteActivity.class);
-//                        intent.putExtra("start_lat", mPositionMark.getPosition().latitude);
-//                        intent.putExtra("start_lng", mPositionMark.getPosition().longitude);
-//                        intent.putExtra("end_lat", marker.getPosition().latitude);
-//                        intent.putExtra("end_lng", marker.getPosition().longitude);
-//                        startActivity(intent);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -437,6 +512,86 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             return true;
         }
     };
+
+    //红包地区循环发送线程
+    class RedSendThread implements Runnable{
+
+        @Override
+        public void run() {
+            try {
+
+                while (isStartPick) {
+                    //克隆数据
+                    EnvData clone = null;
+
+                    try {
+                        clone = envData.clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+
+                    redDatas.add(clone);
+                    Thread.sleep(2000);
+                    if (redDatas.size() == 5) {
+                        //主动发数据
+                        new Thread(new SendRedCollectinThread()).start();
+                        Message msg = new Message();
+                        msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
+                        handler.sendMessage(msg);
+                    }
+                    Log.i("redDatas", redDatas.toString());
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //红包所在地主动上传数据线程
+    class SendRedCollectinThread implements Runnable {
+
+        @Override
+        public void run() {
+            Gson gson = new Gson();
+            String sendData = gson.toJson(redDatas);
+            RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/open_redpackage_data/");
+            params.addHeader("Content-type", "application/json");
+            params.setCharset("UTF-8");
+            params.setAsJsonContent(true);
+            params.setBodyContent(sendData);
+
+            Log.i("server", "run_SUCCESS");
+
+            x.http().post(params, redcallback);
+
+        }
+    }
+
+    private Callback.CommonCallback<String> redcallback = new Callback.CommonCallback<String>() {
+        @Override
+        public void onSuccess(String result) {
+            redDatas.clear();
+//            isUpload = false;
+        }
+
+        @Override
+        public void onError(Throwable ex, boolean isOnCallback) {
+            redDatas.clear();
+        }
+
+        @Override
+        public void onCancelled(CancelledException cex) {
+            redDatas.clear();
+        }
+
+        @Override
+        public void onFinished() {
+            redDatas.clear();
+        }
+    };
+
 
     private void startAnim(Marker marker) {
         ScaleAnimation anim = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f);
@@ -803,8 +958,6 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             // 1、实际红包和实际车辆；2、改为传三个参数：地图、LatLng集合（经度坐标、纬度坐标、红包是否已抢标志）
 
             new Thread(new RedLocation()).start();
-
-
 //            Utils.addEmulateData(aMap, mStartPosition);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_scan_code.setVisibility(View.VISIBLE);
@@ -845,8 +998,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             String jsonBack = result;
             Type type = new TypeToken<List<RedPackageLocation>>() {
             }.getType();
-            List<RedPackageLocation> redPackageLocations = new Gson().fromJson(jsonBack, type);
-            PutRedpackageUtils.addEmulateData(aMap,mStartPosition,redPackageLocations);
+            redPackageLocations = new Gson().fromJson(jsonBack, type);
+            PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
             Log.i("red", redPackageLocations.toString());
             Log.i("red", "success");
         }
