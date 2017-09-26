@@ -540,9 +540,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     if (redDatas.size() == 5) {
                         //主动发数据
                         new Thread(new SendRedCollectinThread()).start();
-                        Message msg = new Message();
-                        msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
-                        handler.sendMessage(msg);
+
                     }
                     Log.i("redDatas", redDatas.toString());
                 }
@@ -578,6 +576,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         @Override
         public void onSuccess(String result) {
             redDatas.clear();
+
+            Message msg = new Message();
+            msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
+            handler.sendMessage(msg);
             //弹出一个Dialog
             RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
             RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
