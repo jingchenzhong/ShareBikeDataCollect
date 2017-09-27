@@ -101,6 +101,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static com.hnulab.sharebike.em.lib.PutRedpackageUtils.markers;
+
 //import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements AMap.OnCameraChangeListener,
@@ -199,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private boolean isUpload = false;//上传数据标志位（锁功能）
     private ArrayList<BitmapDescriptor> icons;
     private List<RedPackageLocation> redPackageLocations;
+    private Thread redSendThread;//红包所在地主动发数据线程
+    private Thread redLocation;//获取红包线程
 
     private enum handler_key {
         //自动上传数据成功
@@ -449,55 +453,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                             Log.i("radius", "distance:" + String.valueOf(distance));
 
                             if (distance < radius) {
-
-                                Thread redSendThread = new Thread(new RedSendThread());
+                                //开启红包主动传数据线程
+                                redSendThread = new Thread(new RedSendThread());
                                 redSendThread.start();
-//                               new Thread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        try {
-//
-//                                            while (isStartPick) {
-//                                                //克隆数据
-//                                                EnvData clone = null;
-//
-//                                                try {
-//                                                    clone = envData.clone();
-//                                                } catch (CloneNotSupportedException e) {
-//                                                    e.printStackTrace();
-//                                                }
-//
-//                                                redDatas.add(clone);
-//                                                Thread.sleep(2000);
-//                                                if (redDatas.size() == 5) {
-//                                                    //主动发数据
-//                                                    new Thread(new SendRedCollectinThread()).start();
-//                                                    Message msg = new Message();
-//                                                    msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
-//                                                    handler.sendMessage(msg);
-//                                                }
-//                                                Log.i("redDatas", redDatas.toString());
-//                                            }
-//
-//
-//                                        } catch (Exception e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                    }
-//                                }).start();
-
-//                                if (redDatas.size() == 5) {
-//                                    //主动发数据
-//                                    new Thread(new SendRedCollectinThread()).start();
-//                                    Message msg = new Message();
-//                                    msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
-//                                    handler.sendMessage(msg);
-//                                }
 
                                 //弹出一个Dialog
-//                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-//                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-//                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+
+
+
 
                             } else {
                                 Message msg = new Message();
@@ -519,7 +485,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     };
 
     //红包地区循环发送线程
-    class RedSendThread implements Runnable{
+    class RedSendThread implements Runnable {
 
         @Override
         public void run() {
@@ -531,6 +497,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
                     try {
                         clone = envData.clone();
+                        clone.setE_latitfude(28.1893000000);
+                        clone.setE_longitude(112.9485000000);
+//                        clone.setE_latitfude(112.9476000000);
+//                        clone.setE_longitude(28.1900000000);
+//                        clone.setE_latitfude(112.9476000000);
+//                        clone.setE_longitude(28.1876000000);
+
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
@@ -539,7 +512,18 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     Thread.sleep(2000);
                     if (redDatas.size() == 5) {
                         //主动发数据
-                        new Thread(new SendRedCollectinThread()).start();
+//                        new Thread(new SendRedCollectinThread()).start();
+                        Gson gson = new Gson();
+                        String sendData = gson.toJson(redDatas);
+                        RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/open_redpackage_data/");
+                        params.addHeader("Content-type", "application/json");
+                        params.setCharset("UTF-8");
+                        params.setAsJsonContent(true);
+                        params.setBodyContent(sendData);
+
+                        Log.i("server", "run_SUCCESS");
+
+                        x.http().post(params, redcallback);
 
                     }
                     Log.i("redDatas", redDatas.toString());
@@ -553,37 +537,45 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     }
 
     //红包所在地主动上传数据线程
-    class SendRedCollectinThread implements Runnable {
-
-        @Override
-        public void run() {
-            Gson gson = new Gson();
-            String sendData = gson.toJson(redDatas);
-            RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/open_redpackage_data/");
-            params.addHeader("Content-type", "application/json");
-            params.setCharset("UTF-8");
-            params.setAsJsonContent(true);
-            params.setBodyContent(sendData);
-
-            Log.i("server", "run_SUCCESS");
-
-            x.http().post(params, redcallback);
-
-        }
-    }
+//    class SendRedCollectinThread implements Runnable {
+//
+//        @Override
+//        public void run() {
+//            Gson gson = new Gson();
+//            String sendData = gson.toJson(redDatas);
+//            RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/open_redpackage_data/");
+//            params.addHeader("Content-type", "application/json");
+//            params.setCharset("UTF-8");
+//            params.setAsJsonContent(true);
+//            params.setBodyContent(sendData);
+//
+//            Log.i("server", "run_SUCCESS");
+//
+//            x.http().post(params, redcallback);
+//
+//        }
+//    }
 
     private Callback.CommonCallback<String> redcallback = new Callback.CommonCallback<String>() {
         @Override
         public void onSuccess(String result) {
-            redDatas.clear();
+//            redDatas.clear();
 
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
             handler.sendMessage(msg);
+
+            //移除所有红包
+            PutRedpackageUtils.removeMarkers();
+
+            //重新开启线程加载红包
+            redLocation = new Thread(new RedLocation());
+            redLocation.start();
+
             //弹出一个Dialog
-            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+//            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+//            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+//            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
 //            isUpload = false;
         }
 
@@ -602,6 +594,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onFinished() {
+//            redSendThread.interrupt();
+            redSendThread.interrupt();
             redDatas.clear();
         }
     };
@@ -751,11 +745,18 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
-                BluetoothReceiver.BLUETOOTH_PIN = "1234";
-                BluetoothConnect();
+//                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
+//                BluetoothReceiver.BLUETOOTH_PIN = "1234";
+//                BluetoothConnect();
 //                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
 //                startActivityForResult(intent, REQUEST_CODE);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.icon(BitmapDescriptorFactory
+                        .fromResource(R.drawable.stable_cluster_marker_one_normal));
+
+                markerOptions.position( new LatLng(28.1876000000,112.9460000000));
+                Marker marker = aMap.addMarker(markerOptions);
+                markers.add(marker);
                 break;
         }
     }
@@ -971,7 +972,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             // TODO: 2017/9/14 实现：
             // 1、实际红包和实际车辆；2、改为传三个参数：地图、LatLng集合（经度坐标、纬度坐标、红包是否已抢标志）
 
-            new Thread(new RedLocation()).start();
+            redLocation = new Thread(new RedLocation());
+            redLocation.start();
+//            new Thread(new RedLocation()).start();
 //            Utils.addEmulateData(aMap, mStartPosition);
             iv_refresh.setVisibility(View.VISIBLE);
             iv_scan_code.setVisibility(View.VISIBLE);
@@ -1002,6 +1005,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
             x.http().get(params, redLocationCallback);
 
+
         }
     }
 
@@ -1020,17 +1024,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
-
+            Log.i("red", "onError");
         }
 
         @Override
         public void onCancelled(CancelledException cex) {
-
+            Log.i("red", "onCancelled");
         }
 
         @Override
         public void onFinished() {
-
+            Log.i("red", "onFinished");
         }
     };
 
@@ -1113,25 +1117,25 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             //填充数据到集合
             envDatas.add(clone);
             Log.e("envData", "数据：" + clone.toString());
-        }
-        //如果缓存数据已经有100条
-        if (envDatas.size() == 10 && isUpload == false) {
-            // TODO: 2017/9/14 线程锁处理
-            isUpload = true;
-            /**
-             * description:传数据到服务器
-             * auther：xuewenliao
-             * time：2017/9/13 21:07
-             */
-            Log.i("server", "come");
-            Thread loginThread = new Thread(new SendDataThread());
-            loginThread.start();
+            //如果缓存数据已经有100条
+            if (envDatas.size() == 10 && isUpload == false) {
+                // TODO: 2017/9/14 线程锁处理
+                isUpload = true;
+                /**
+                 * description:传数据到服务器
+                 * auther：xuewenliao
+                 * time：2017/9/13 21:07
+                 */
+                Log.i("server", "come");
+                Thread loginThread = new Thread(new SendDataThread());
+                loginThread.start();
 
-            Message msg = new Message();
-            msg.what = handler_key.UPLOADSUCCESS.ordinal();
-            handler.sendMessage(msg);
-            Log.i("server", "start");
+                Message msg = new Message();
+                msg.what = handler_key.UPLOADSUCCESS.ordinal();
+                handler.sendMessage(msg);
+                Log.i("server", "start");
 
+            }
         }
 
 
