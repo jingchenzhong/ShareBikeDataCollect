@@ -101,8 +101,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static com.hnulab.sharebike.em.lib.PutRedpackageUtils.markers;
-
 //import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements AMap.OnCameraChangeListener,
@@ -203,6 +201,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private List<RedPackageLocation> redPackageLocations;
     private Thread redSendThread;//红包所在地主动发数据线程
     private Thread redLocation;//获取红包线程
+    private boolean isIinitRed = true;//初始化红包标志位
+    private ArrayList<Marker> updataMarkers;
+    private double redLongitude;
+    private double redLatitude;
 
     private enum handler_key {
         //自动上传数据成功
@@ -463,8 +465,6 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                                 RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
 
 
-
-
                             } else {
                                 Message msg = new Message();
                                 msg.what = handler_key.OUTOFREDRANGE.ordinal();
@@ -484,7 +484,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
     };
 
-    //红包地区循环发送线程
+    //红包地区主动循环发送线程
     class RedSendThread implements Runnable {
 
         @Override
@@ -497,12 +497,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
                     try {
                         clone = envData.clone();
-                        clone.setE_latitfude(28.1893000000);
-                        clone.setE_longitude(112.9485000000);
-//                        clone.setE_latitfude(112.9476000000);
-//                        clone.setE_longitude(28.1900000000);
-//                        clone.setE_latitfude(112.9476000000);
-//                        clone.setE_longitude(28.1876000000);
+//                        clone.setE_latitfude(mStartPoint.getLatitude());
+//                        clone.setE_longitude(mStartPoint.getLongitude());
+                        clone.setE_latitfude(mStartPoint.getLatitude());
+                        clone.setE_longitude(mStartPoint.getLongitude());
 
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
@@ -511,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     redDatas.add(clone);
                     Thread.sleep(2000);
                     if (redDatas.size() == 5) {
-                        //主动发数据
+
 //                        new Thread(new SendRedCollectinThread()).start();
                         Gson gson = new Gson();
                         String sendData = gson.toJson(redDatas);
@@ -536,26 +534,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
     }
 
-    //红包所在地主动上传数据线程
-//    class SendRedCollectinThread implements Runnable {
-//
-//        @Override
-//        public void run() {
-//            Gson gson = new Gson();
-//            String sendData = gson.toJson(redDatas);
-//            RequestParams params = new RequestParams("http://39.108.151.208:9030/sharebike/evn_data/open_redpackage_data/");
-//            params.addHeader("Content-type", "application/json");
-//            params.setCharset("UTF-8");
-//            params.setAsJsonContent(true);
-//            params.setBodyContent(sendData);
-//
-//            Log.i("server", "run_SUCCESS");
-//
-//            x.http().post(params, redcallback);
-//
-//        }
-//    }
-
+    //主动发数据
     private Callback.CommonCallback<String> redcallback = new Callback.CommonCallback<String>() {
         @Override
         public void onSuccess(String result) {
@@ -568,15 +547,21 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             //移除所有红包
             PutRedpackageUtils.removeMarkers();
 
-            //重新开启线程加载红包
+
+//            if (isIinitRed == true) {
+//                PutRedpackageUtils.removeMarkers();
+//            } else {
+//                for (Marker marker : updataMarkers) {
+//                    marker.remove();
+//                    marker.destroy();
+//                }
+//                updataMarkers.clear();
+//            }
+
+            //重新开启加载红包线程
             redLocation = new Thread(new RedLocation());
             redLocation.start();
 
-            //弹出一个Dialog
-//            RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-//            RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-//            RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
-//            isUpload = false;
         }
 
         @Override
@@ -594,8 +579,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onFinished() {
-//            redSendThread.interrupt();
             redSendThread.interrupt();
+//            redSendThread.stop();
             redDatas.clear();
         }
     };
@@ -745,18 +730,19 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-//                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
-//                BluetoothReceiver.BLUETOOTH_PIN = "1234";
-//                BluetoothConnect();
+                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
+                BluetoothReceiver.BLUETOOTH_PIN = "1234";
+                BluetoothConnect();
 //                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
 //                startActivityForResult(intent, REQUEST_CODE);
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.stable_cluster_marker_one_normal));
 
-                markerOptions.position( new LatLng(28.1876000000,112.9460000000));
-                Marker marker = aMap.addMarker(markerOptions);
-                markers.add(marker);
+//                MarkerOptions markerOptions = new MarkerOptions();
+//                markerOptions.icon(BitmapDescriptorFactory
+//                        .fromResource(R.drawable.stable_cluster_marker_one_normal));
+
+//                markerOptions.position( new LatLng(28.1876000000,112.9460000000));
+//                Marker marker = aMap.addMarker(markerOptions);
+//                markers.add(marker);
                 break;
         }
     }
@@ -1017,7 +1003,26 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             Type type = new TypeToken<List<RedPackageLocation>>() {
             }.getType();
             redPackageLocations = new Gson().fromJson(jsonBack, type);
-            PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
+            if (isIinitRed) {
+                isIinitRed = false;
+                PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
+            } else {
+//                PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
+                for (int i = 0; i < redPackageLocations.size(); i++) {
+                    redLongitude = redPackageLocations.get(i).getE_longitude();
+                    redLatitude = redPackageLocations.get(i).getE_latitfude();
+
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.marker_red_package));
+
+                    markerOptions.position(new LatLng(redLatitude, redLongitude));
+                    Marker marker = aMap.addMarker(markerOptions);
+                    updataMarkers = new ArrayList<Marker>();
+                    updataMarkers.add(marker);
+
+                }
+            }
             Log.i("red", redPackageLocations.toString());
             Log.i("red", "success");
         }
@@ -1369,7 +1374,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         isClickIdentification = false;
 
         //遍历点，恢复点对应图标
-        ArrayList<Marker> markers = Utils.markers;
+        ArrayList<Marker> markers = PutRedpackageUtils.markers;
+//        ArrayList<Marker> markers = new ArrayList<Marker>();
+//        markers = updataMarkers;
         if (null != tempMark) {
             for (Marker marker : markers) {
                 if (marker.equals(tempMark)) {
