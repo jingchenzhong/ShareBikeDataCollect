@@ -554,10 +554,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             handler.sendMessage(msg);
 
             //移除所有红包
-            tempMark.remove();
+//            tempMark.remove();
 //            PutRedpackageUtils.markers.clear();
 //            updataMarkers.clear();
-            PutRedpackageUtils.removeMarkers();
+
+            //隐藏红包
+//            PutRedpackageUtils.hideMarkers();
 
 //            if (isIinitRed == true) {
 //                PutRedpackageUtils.removeMarkers();
@@ -1019,21 +1021,23 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 isIinitRed = false;
                 PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
             } else {
-//                PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
-                for (int i = 0; i < redPackageLocations.size(); i++) {
-                    redLongitude = redPackageLocations.get(i).getE_longitude();
-                    redLatitude = redPackageLocations.get(i).getE_latitfude();
-
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.marker_red_package));
-
-                    markerOptions.position(new LatLng(redLatitude, redLongitude));
-                    Marker marker = aMap.addMarker(markerOptions);
-                    updataMarkers = new ArrayList<Marker>();
-                    updataMarkers.add(marker);
-
-                }
+                PutRedpackageUtils.upMarkers(aMap, mStartPosition, redPackageLocations);
+                System.out.println(1);
+//                aMap.notifyAll();
+//                for (int i = 0; i < redPackageLocations.size(); i++) {
+//                    redLongitude = redPackageLocations.get(i).getE_longitude();
+//                    redLatitude = redPackageLocations.get(i).getE_latitfude();
+//
+//                    MarkerOptions markerOptions = new MarkerOptions();
+//                    markerOptions.icon(BitmapDescriptorFactory
+//                            .fromResource(R.drawable.marker_red_package));
+//
+//                    markerOptions.position(new LatLng(redLatitude, redLongitude));
+//                    Marker marker = aMap.addMarker(markerOptions);
+//                    updataMarkers = new ArrayList<Marker>();
+//                    updataMarkers.add(marker);
+//
+//                }
 
 //                PutRedpackageUtils.markers=updataMarkers;
             }

@@ -9,7 +9,6 @@ package com.hnulab.sharebike.em.lib;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
@@ -18,6 +17,8 @@ import com.hnulab.sharebike.em.entity.RedPackageLocation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.amap.api.maps.model.BitmapDescriptorFactory.fromResource;
 
 
 /**
@@ -31,11 +32,11 @@ public class PutRedpackageUtils {
     public static BitmapDescriptor bitmapDescriptor;
     public static boolean isMarkbike;
     //车的对象
-    public static BitmapDescriptor bitmapBike = BitmapDescriptorFactory
-            .fromResource(R.drawable.stable_cluster_marker_one_normal);
+    public static BitmapDescriptor bitmapBike =
+         fromResource(R.drawable.stable_cluster_marker_one_normal);
     //红包的对象
-    public static BitmapDescriptor bitmapPackage = BitmapDescriptorFactory
-            .fromResource(R.drawable.marker_red_package);
+    public static BitmapDescriptor bitmapPackage =
+         fromResource(R.drawable.marker_red_package);
 
 
     /**
@@ -58,8 +59,8 @@ public class PutRedpackageUtils {
                 markerOptions.position(new LatLng(redLatitude, redLongitude));
                 Marker marker = amap.addMarker(markerOptions);
                 markers.add(marker);
-
             }
+            System.out.println(1);
 
 //            for (int i = 0; i < 20; i++) {
 //                if (i % 3 == 0) {
@@ -114,7 +115,25 @@ public class PutRedpackageUtils {
     }
 
 
-    public static void upData(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
+    /**
+     * 隐藏marker
+     */
+    public static void hideMarkers() {
+        for (Marker marker : markers) {
+            marker.setVisible(false);
+        }
+    }
+
+
+    /**
+     * 更新
+     * @param amap
+     * @param center
+     * @param redPackageLocations
+     */
+    public static void upMarkers(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
+        //隐藏marker
+        hideMarkers();
         double redLongitude;
         double redLatitude;
         for (int i = 0; i < redPackageLocations.size(); i++) {
@@ -125,9 +144,10 @@ public class PutRedpackageUtils {
             markerOptions.icon(bitmapPackage);
             markerOptions.position(new LatLng(redLatitude, redLongitude));
             Marker marker = amap.addMarker(markerOptions);
+            marker.setVisible(true);
             markers.add(marker);
-
         }
+              System.out.println(1);
     }
 
 
