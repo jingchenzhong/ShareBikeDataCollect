@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     }
                 }
 
-                tempMark.remove();
+//                tempMark.remove();
 
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
@@ -557,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             tempMark.remove();
 //            PutRedpackageUtils.markers.clear();
 //            updataMarkers.clear();
-//            PutRedpackageUtils.removeMarkers();
+            PutRedpackageUtils.removeMarkers();
 
 //            if (isIinitRed == true) {
 //                PutRedpackageUtils.removeMarkers();
@@ -1393,26 +1393,27 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private void clickInitInfo() {
         isClickIdentification = false;
         //刷新红包线程
-        tempMark.remove();
 //        updataMarkers.clear();
         Thread refreshRed = new Thread(new RedLocation());
         refreshRed.start();
+
+//        tempMark.remove();
         //遍历点，恢复点对应图标
-//        ArrayList<Marker> markers = PutRedpackageUtils.markers;
-//        if (null != tempMark) {
-//            for (Marker marker : markers) {
-//                if (marker.equals(tempMark)) {
-//                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
-//                        tempMark.setIcon(smallIdentificationBitmap);
-//                    } else {
-//                        tempMark.setIcon(smallredpacageBitmap);
-//                    }
-//                }
-//            }
+        ArrayList<Marker> markers = PutRedpackageUtils.markers;
+        if (null != tempMark) {
+            for (Marker marker : markers) {
+                if (marker.equals(tempMark)) {
+                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
+                        tempMark.setIcon(smallIdentificationBitmap);
+                    } else {
+                        tempMark.setIcon(smallredpacageBitmap);
+                    }
+                }
+            }
 //            tempMark.remove();
-//            tempMark.hideInfoWindow();
-//            tempMark = null;
-//        }
+            tempMark.hideInfoWindow();
+            tempMark = null;
+        }
         if (null != walkRouteOverlay) {
             walkRouteOverlay.removeFromMap();
         }
