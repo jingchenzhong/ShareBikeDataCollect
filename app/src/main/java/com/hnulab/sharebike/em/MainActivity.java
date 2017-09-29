@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     }
                 }
 
-//                tempMark.remove();
+                tempMark.remove();
 
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
@@ -555,6 +555,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
             //移除所有红包
             tempMark.remove();
+//            PutRedpackageUtils.markers.clear();
+//            updataMarkers.clear();
 //            PutRedpackageUtils.removeMarkers();
 
 //            if (isIinitRed == true) {
@@ -1029,7 +1031,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     markerOptions.position(new LatLng(redLatitude, redLongitude));
                     Marker marker = aMap.addMarker(markerOptions);
                     updataMarkers = new ArrayList<Marker>();
-                    updataMarkers.add(marker); 
+                    updataMarkers.add(marker);
 
                 }
 
@@ -1362,6 +1364,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     }
 
     private void clickRefresh() {
+
+
+//        //重新开启加载红包线程
+//        Thread refreshRed = new Thread(new RedLocation());
+//        refreshRed.start();
+
         clickInitInfo();
         if (initLocation != null) {
             CameraUpdate cameraUpate = CameraUpdateFactory.newLatLngZoom(
@@ -1384,7 +1392,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
      */
     private void clickInitInfo() {
         isClickIdentification = false;
+        //刷新红包线程
         tempMark.remove();
+//        updataMarkers.clear();
+        Thread refreshRed = new Thread(new RedLocation());
+        refreshRed.start();
         //遍历点，恢复点对应图标
 //        ArrayList<Marker> markers = PutRedpackageUtils.markers;
 //        if (null != tempMark) {

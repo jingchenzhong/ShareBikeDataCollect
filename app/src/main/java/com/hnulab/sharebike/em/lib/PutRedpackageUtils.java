@@ -21,10 +21,10 @@ import java.util.List;
 
 
 /**
-     * description:添加红包和车
-     * auther：xuewenliao
-     * time：2017/9/25 10:20
-     */
+ * description:添加红包和车
+ * auther：xuewenliao
+ * time：2017/9/25 10:20
+ */
 public class PutRedpackageUtils {
 
     public static ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -43,7 +43,7 @@ public class PutRedpackageUtils {
      * 81个网格红包
      * 车随机产生
      */
-    public static void addEmulateData(AMap amap, LatLng center,List<RedPackageLocation> redPackageLocations) {
+    public static void addEmulateData(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
         if (markers.size() == 0) {
 
             double redLongitude;
@@ -55,7 +55,7 @@ public class PutRedpackageUtils {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.icon(bitmapPackage);
 
-                markerOptions.position( new LatLng(redLatitude,redLongitude));
+                markerOptions.position(new LatLng(redLatitude, redLongitude));
                 Marker marker = amap.addMarker(markerOptions);
                 markers.add(marker);
 
@@ -90,7 +90,7 @@ public class PutRedpackageUtils {
                 for (int i = 0; i < redPackageLocations.size(); i++) {
                     redLongitude = redPackageLocations.get(i).getE_longitude();
                     redLatitude = redPackageLocations.get(i).getE_latitfude();
-                    marker.setPosition(new LatLng(redLatitude,redLongitude));
+                    marker.setPosition(new LatLng(redLatitude, redLongitude));
 
                 }
 
@@ -112,6 +112,24 @@ public class PutRedpackageUtils {
         }
         markers.clear();
     }
+
+
+    public static void upData(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
+        double redLongitude;
+        double redLatitude;
+        for (int i = 0; i < redPackageLocations.size(); i++) {
+            redLongitude = redPackageLocations.get(i).getE_longitude();
+            redLatitude = redPackageLocations.get(i).getE_latitfude();
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.icon(bitmapPackage);
+            markerOptions.position(new LatLng(redLatitude, redLongitude));
+            Marker marker = amap.addMarker(markerOptions);
+            markers.add(marker);
+
+        }
+    }
+
 
 }
   
