@@ -405,10 +405,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             // TODO: 2017/9/14 点击Markerbug
             if (tempMark != null) {
 
-                //遍历点，恢复点对应图标
-                ArrayList<Marker> markers = Utils.markers;
+//                tempMark.remove();
+                //遍历点，恢复点对应图标 // FIXME: 2017/9/28 
+                ArrayList<Marker> markers = PutRedpackageUtils.markers;
                 for (Marker marker1 : markers) {
                     if (marker1.equals(tempMark)) {
+//                        tempMark.remove();
                         if (marker1.getIcons().get(0).equals(bigIdentificationBitmap)) {
                             tempMark.setIcon(smallIdentificationBitmap);
                         } else {
@@ -416,6 +418,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         }
                     }
                 }
+
+//                tempMark.remove();
 
                 walkRouteOverlay.removeFromMap();
                 tempMark = null;
@@ -455,6 +459,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                             Log.i("radius", "distance:" + String.valueOf(distance));
 
                             if (distance < radius) {
+
+//                                tempMark.remove();
+
                                 //开启红包主动传数据线程
                                 redSendThread = new Thread(new RedSendThread());
                                 redSendThread.start();
@@ -540,13 +547,15 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         public void onSuccess(String result) {
 //            redDatas.clear();
 
+//            tempMark.remove();
+
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
             handler.sendMessage(msg);
 
             //移除所有红包
-            PutRedpackageUtils.removeMarkers();
-
+            tempMark.remove();
+//            PutRedpackageUtils.removeMarkers();
 
 //            if (isIinitRed == true) {
 //                PutRedpackageUtils.removeMarkers();
@@ -557,6 +566,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                }
 //                updataMarkers.clear();
 //            }
+
 
             //重新开启加载红包线程
             redLocation = new Thread(new RedLocation());
@@ -606,7 +616,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         }
 
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
-        Utils.removeMarkers();
+        PutRedpackageUtils.removeMarkers();
         mMapView.onDestroy();
         mLocationTask.onDestroy();
         RouteTask.getInstance(getApplicationContext()).removeRouteCalculateListener(this);
@@ -1019,9 +1029,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     markerOptions.position(new LatLng(redLatitude, redLongitude));
                     Marker marker = aMap.addMarker(markerOptions);
                     updataMarkers = new ArrayList<Marker>();
-                    updataMarkers.add(marker);
+                    updataMarkers.add(marker); 
 
                 }
+
+//                PutRedpackageUtils.markers=updataMarkers;
             }
             Log.i("red", redPackageLocations.toString());
             Log.i("red", "success");
@@ -1372,24 +1384,23 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
      */
     private void clickInitInfo() {
         isClickIdentification = false;
-
+        tempMark.remove();
         //遍历点，恢复点对应图标
-        ArrayList<Marker> markers = PutRedpackageUtils.markers;
-//        ArrayList<Marker> markers = new ArrayList<Marker>();
-//        markers = updataMarkers;
-        if (null != tempMark) {
-            for (Marker marker : markers) {
-                if (marker.equals(tempMark)) {
-                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
-                        tempMark.setIcon(smallIdentificationBitmap);
-                    } else {
-                        tempMark.setIcon(smallredpacageBitmap);
-                    }
-                }
-            }
-            tempMark.hideInfoWindow();
-            tempMark = null;
-        }
+//        ArrayList<Marker> markers = PutRedpackageUtils.markers;
+//        if (null != tempMark) {
+//            for (Marker marker : markers) {
+//                if (marker.equals(tempMark)) {
+//                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
+//                        tempMark.setIcon(smallIdentificationBitmap);
+//                    } else {
+//                        tempMark.setIcon(smallredpacageBitmap);
+//                    }
+//                }
+//            }
+//            tempMark.remove();
+//            tempMark.hideInfoWindow();
+//            tempMark = null;
+//        }
         if (null != walkRouteOverlay) {
             walkRouteOverlay.removeFromMap();
         }
