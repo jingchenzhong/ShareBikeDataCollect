@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">环境监测共享单车</string>
     <string name="no_result">对不起，没有搜索到相关数据！</string>
-    <string name="title">环境监测共享单车</string>
+    <string name="title">SBEM</string>
     <!--redPackage-->
     <string name="titleRedpackage">数据正在采集\n红包领取倒计时</string>
     <string name="collectionTime">倒计时</string>

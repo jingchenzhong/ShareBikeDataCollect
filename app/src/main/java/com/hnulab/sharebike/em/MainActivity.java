@@ -212,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         REDUPLOADSUCCESS,
         //主动上传数据失败（测试用）
         REDUPLOADFAIL,
-        //不在采集范围
+        //不在采集范围(人没在湖师大)
         OUYOFPALACE,
         //不在获取红包范围内
         OUTOFREDRANGE,
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "红包所在地上传数据失败");
                     break;
                 case OUYOFPALACE:
-                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围");
+                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围(人没在湖师大)");
                     break;
                 case OUTOFREDRANGE:
                     ToastUtil.show(MainActivity.this, "您不在红包获取范围");
@@ -453,11 +453,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * auther：xuewenliao
                              * time：2017/9/26 9:37
                              */
-                            double radius = Distance.GetRadius(redPackageLocations);
+//                            double radius = Distance.GetRadius(redPackageLocations);
+                            double radius =  19.62308623512004;
                             Log.i("radius", "radius:" + String.valueOf(radius));
 
-//                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude,marker.getPosition().latitude,marker.getPosition().longitude));
-                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
+                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude,marker.getPosition().latitude,marker.getPosition().longitude));
+//                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
                             Log.i("radius", "distance:" + String.valueOf(distance));
 
                             if (distance < radius) {
@@ -647,12 +648,15 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume();
-        // TODO: 2017/10/8 3D-->2D
+        // 保证定位图标在地图上方，点击后不会卡死
         if (mInitialMark != null) {
 //            mInitialMark.setToTop();
+            mInitialMark.setVisible(true);
+
         }
         if (mPositionMark != null) {
 //            mPositionMark.setToTop();
+            mInitialMark.setVisible(true);
         }
     }
 
@@ -987,16 +991,19 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             createMovingPosition();
             mIsFirst = false;
         }
-        // TODO: 2017/10/8 3D-->2D
-//        if (mInitialMark != null) {
+
+         // 保证定位图标在地图上方，点击后不会卡死
+        if (mInitialMark != null) {
 //            mInitialMark.setToTop();
-//        }
-//        if (mPositionMark != null) {
+            mInitialMark.setVisible(true);
+        }
+        if (mPositionMark != null) {
 //            mPositionMark.setToTop();
-//            if (!isClickIdentification) {
-//                animMarker();
-//            }
-//        }
+            mInitialMark.setVisible(true);
+            if (!isClickIdentification) {
+                animMarker();
+            }
+        }
     }
 
     //获取红包经纬度子线程
