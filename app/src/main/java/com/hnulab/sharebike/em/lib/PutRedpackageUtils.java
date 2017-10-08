@@ -33,10 +33,10 @@ public class PutRedpackageUtils {
     public static boolean isMarkbike;
     //车的对象
     public static BitmapDescriptor bitmapBike =
-         fromResource(R.drawable.stable_cluster_marker_one_normal);
+            fromResource(R.drawable.stable_cluster_marker_one_normal);
     //红包的对象
     public static BitmapDescriptor bitmapPackage =
-         fromResource(R.drawable.marker_red_package);
+            fromResource(R.drawable.marker_red_package);
 
 
     /**
@@ -62,28 +62,6 @@ public class PutRedpackageUtils {
             }
             System.out.println(1);
 
-//            for (int i = 0; i < 20; i++) {
-//                if (i % 3 == 0) {
-//                    bitmapDescriptor = bitmapBike;
-//                } else {
-//                    bitmapDescriptor = bitmapPackage;
-//                }
-//                double latitudeDelt;
-//                double longtitudeDelt;
-//                if (i % 2 == 0) {
-//                    latitudeDelt = (Math.random() - 0.5) * 0.1;
-//                    longtitudeDelt = (Math.random() - 0.5) * 0.1;
-//                } else {
-//                    latitudeDelt = (Math.random() - 0.5) * 0.01;
-//                    longtitudeDelt = (Math.random() - 0.5) * 0.01;
-//                }
-//                MarkerOptions markerOptions = new MarkerOptions();
-//                markerOptions.icon(bitmapDescriptor);
-//
-//                markerOptions.position(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
-//                Marker marker = amap.addMarker(markerOptions);
-//                markers.add(marker);
-//            }
         } else {
             for (Marker marker : markers) {
                 double redLongitude;
@@ -95,10 +73,6 @@ public class PutRedpackageUtils {
 
                 }
 
-//                double latitudeDelt = (Math.random() - 0.5) * 0.1;
-//                double longtitudeDelt = (Math.random() - 0.5) * 0.1;
-//                marker.setPosition(new LatLng(center.latitude + latitudeDelt, center.longitude + longtitudeDelt));
-
             }
         }
     }
@@ -109,11 +83,10 @@ public class PutRedpackageUtils {
     public static void removeMarkers() {
         for (Marker marker : markers) {
             marker.remove();
-            marker.destroy();
+//            marker.destroy();
         }
-        markers.clear();
+//        markers.clear();
     }
-
 
     /**
      * 隐藏marker
@@ -127,13 +100,15 @@ public class PutRedpackageUtils {
 
     /**
      * 更新
+     *
      * @param amap
      * @param center
      * @param redPackageLocations
      */
     public static void upMarkers(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
         //隐藏marker
-        hideMarkers();
+//        hideMarkers();
+        removeMarkers();
         double redLongitude;
         double redLatitude;
         for (int i = 0; i < redPackageLocations.size(); i++) {
@@ -147,7 +122,7 @@ public class PutRedpackageUtils {
             marker.setVisible(true);
             markers.add(marker);
         }
-              System.out.println(1);
+        System.out.println(1);
     }
 
 

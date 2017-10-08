@@ -270,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         initBitmap();
         initAMap();
         initLocation();
+
         RouteTask.getInstance(getApplicationContext())
                 .addRouteCalculateListener(this);
         Log.e(TAG, "sha1" + Sha1.sHA1(this));
@@ -380,6 +381,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             // 绑定 Marker 被点击事件
             aMap.setOnMarkerClickListener(markerClickListener);
             aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+
+
         }
     }
 
@@ -545,32 +548,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private Callback.CommonCallback<String> redcallback = new Callback.CommonCallback<String>() {
         @Override
         public void onSuccess(String result) {
-//            redDatas.clear();
-
-//            tempMark.remove();
 
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
             handler.sendMessage(msg);
 
-            //移除所有红包
-//            tempMark.remove();
-//            PutRedpackageUtils.markers.clear();
-//            updataMarkers.clear();
-
-            //隐藏红包
-//            PutRedpackageUtils.hideMarkers();
-
-//            if (isIinitRed == true) {
-//                PutRedpackageUtils.removeMarkers();
-//            } else {
-//                for (Marker marker : updataMarkers) {
-//                    marker.remove();
-//                    marker.destroy();
-//                }
-//                updataMarkers.clear();
-//            }
-
+//            PutRedpackageUtils.removeMarkers();
 
             //重新开启加载红包线程
             redLocation = new Thread(new RedLocation());
@@ -1017,13 +1000,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             Type type = new TypeToken<List<RedPackageLocation>>() {
             }.getType();
             redPackageLocations = new Gson().fromJson(jsonBack, type);
+            //初始化放图标
             if (isIinitRed) {
                 isIinitRed = false;
                 PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
-            } else {
+            } else {    //更新图标
                 PutRedpackageUtils.upMarkers(aMap, mStartPosition, redPackageLocations);
-                System.out.println(1);
-//                aMap.notifyAll();
+//                PutRedpackageUtils.addEmulateData(aMap, mStartPosition, redPackageLocations);
 //                for (int i = 0; i < redPackageLocations.size(); i++) {
 //                    redLongitude = redPackageLocations.get(i).getE_longitude();
 //                    redLatitude = redPackageLocations.get(i).getE_latitfude();

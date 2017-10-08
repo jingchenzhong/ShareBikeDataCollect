@@ -12,6 +12,7 @@ import android.content.Context;
 
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.ServiceSettings;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.GeocodeSearch.OnGeocodeSearchListener;
@@ -43,6 +44,7 @@ public class RegeocodeTask implements OnGeocodeSearchListener {
 		RegeocodeQuery regecodeQuery = new RegeocodeQuery(new LatLonPoint(
 				latitude, longitude), SEARCH_RADIUS, GeocodeSearch.AMAP);//此类定义了地理编码查询的关键字和查询城市。
 		mGeocodeSearch.getFromLocationAsyn(regecodeQuery);//根据给定的经纬度和最大结果数返回逆地理编码的结果列表。
+		ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
 	}
 
 	public void setOnLocationGetListener(
