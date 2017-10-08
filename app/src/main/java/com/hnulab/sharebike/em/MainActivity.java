@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,17 +38,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.animation.ScaleAnimation;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdate;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.CameraPosition;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -61,7 +61,6 @@ import com.google.gson.reflect.TypeToken;
 import com.hnulab.sharebike.em.activity.DestinationActivity;
 import com.hnulab.sharebike.em.activity.LoginActivity;
 import com.hnulab.sharebike.em.activity.MyMessageActivity;
-import com.hnulab.sharebike.em.activity.MyTripActivity;
 import com.hnulab.sharebike.em.activity.MyWalletActivity;
 import com.hnulab.sharebike.em.activity.PersonalInformationActivity;
 import com.hnulab.sharebike.em.activity.UserKnowActivity;
@@ -371,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             mRouteSearch = new RouteSearch(this);
             mRouteSearch.setRouteSearchListener(this);
             aMap.getUiSettings().setZoomControlsEnabled(false);
-            aMap.getUiSettings().setGestureScaleByMapCenter(true);
+//            aMap.getUiSettings().setGestureScaleByMapCenter(true);
 //            aMap.getUiSettings().setScrollGesturesEnabled(false);
             aMap.setOnMapTouchListener(this);
             aMap.setOnMapLoadedListener(this);
@@ -380,6 +379,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             // 绑定 Marker 被点击事件
             aMap.setOnMarkerClickListener(markerClickListener);
             aMap.setInfoWindowAdapter(this);// 设置自定义InfoWindow样式
+            //设置为英语
+            aMap.setMapLanguage(AMap.ENGLISH);
+
         }
     }
 
@@ -603,8 +605,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private void startAnim(Marker marker) {
         ScaleAnimation anim = new ScaleAnimation(1.0f, 1.3f, 1.0f, 1.3f);
         anim.setDuration(300);
-        marker.setAnimation(anim);
-        marker.startAnimation();
+        // TODO: 2017/10/8 3D--2D
+//        marker.setAnimation(anim);
+//        marker.startAnimation();
     }
 
 
@@ -644,11 +647,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
         mMapView.onResume();
+        // TODO: 2017/10/8 3D-->2D
         if (mInitialMark != null) {
-            mInitialMark.setToTop();
+//            mInitialMark.setToTop();
         }
         if (mPositionMark != null) {
-            mPositionMark.setToTop();
+//            mPositionMark.setToTop();
         }
     }
 
@@ -694,13 +698,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 }, 360);
                 break;
             case R.id.ll_nav_trip:
-                mBinding.drawerLayout.closeDrawer(GravityCompat.START);
-                mBinding.drawerLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyTripActivity.start(MainActivity.this);
-                    }
-                }, 360);
+                // TODO: 2017/10/8 3D-->2D
+//                mBinding.drawerLayout.closeDrawer(GravityCompat.START);
+//                mBinding.drawerLayout.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        MyTripActivity.start(MainActivity.this);
+//                    }
+//                }, 360);
                 break;
             case R.id.ll_nav_money:
                 mBinding.drawerLayout.closeDrawer(GravityCompat.START);
@@ -982,15 +987,16 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             createMovingPosition();
             mIsFirst = false;
         }
-        if (mInitialMark != null) {
-            mInitialMark.setToTop();
-        }
-        if (mPositionMark != null) {
-            mPositionMark.setToTop();
-            if (!isClickIdentification) {
-                animMarker();
-            }
-        }
+        // TODO: 2017/10/8 3D-->2D
+//        if (mInitialMark != null) {
+//            mInitialMark.setToTop();
+//        }
+//        if (mPositionMark != null) {
+//            mPositionMark.setToTop();
+//            if (!isClickIdentification) {
+//                animMarker();
+//            }
+//        }
     }
 
     //获取红包经纬度子线程
@@ -1080,7 +1086,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         markerOptions.position(new LatLng(lat, lng));
         markerOptions.icon(initBitmap);
         mInitialMark = aMap.addMarker(markerOptions);
-        mInitialMark.setClickable(false);
+        // TODO: 2017/10/8 3D-->2D
+//        mInitialMark.setClickable(false);
     }
 
     /**
@@ -1095,7 +1102,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         mPositionMark = aMap.addMarker(markerOptions);
         mPositionMark.setPositionByPixels(mMapView.getWidth() / 2,
                 mMapView.getHeight() / 2);
-        mPositionMark.setClickable(false);
+        // TODO: 2017/10/8 3D-->2D
+//        mPositionMark.setClickable(false);
     }
 
     //一秒定位一次，获取到所有位置信息

@@ -10,16 +10,12 @@ import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnInfoWindowClickListener;
-import com.amap.api.maps.AMap.OnMapClickListener;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -38,8 +34,8 @@ import com.hnulab.sharebike.em.util.ToastUtil;
 /**
  * 驾车出行路线规划 实现
  */
-public class DriveRouteActivity extends Activity implements OnMapClickListener,
-		OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
+public class DriveRouteActivity extends Activity implements AMap.OnMapClickListener,
+AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.InfoWindowAdapter, OnRouteSearchListener {
 	private AMap aMap;
 	private MapView mapView;
 	private Context mContext;

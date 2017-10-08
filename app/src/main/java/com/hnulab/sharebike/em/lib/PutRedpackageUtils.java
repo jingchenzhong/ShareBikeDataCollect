@@ -7,18 +7,18 @@
 
 package com.hnulab.sharebike.em.lib;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.hnulab.sharebike.em.R;
 import com.hnulab.sharebike.em.entity.RedPackageLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.amap.api.maps.model.BitmapDescriptorFactory.fromResource;
+import static com.amap.api.maps2d.model.BitmapDescriptorFactory.fromResource;
 
 
 /**

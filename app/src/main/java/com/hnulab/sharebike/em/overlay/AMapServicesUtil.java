@@ -6,7 +6,7 @@ package com.hnulab.sharebike.em.overlay;
 
 import android.graphics.Bitmap;
 
-import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.services.core.LatLonPoint;
 
 import java.io.ByteArrayOutputStream;

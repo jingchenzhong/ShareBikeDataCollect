@@ -2,12 +2,12 @@ package com.hnulab.sharebike.em.overlay;
 
 import android.content.Context;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.RidePath;
 import com.amap.api.services.route.RideStep;

@@ -7,15 +7,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnInfoWindowClickListener;
-import com.amap.api.maps.AMap.OnMapClickListener;
-import com.amap.api.maps.AMap.OnMapLoadedListener;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
 import com.amap.api.services.route.BusPath;
 import com.amap.api.services.route.BusRouteResult;
 import com.hnulab.sharebike.em.R;
@@ -23,8 +18,8 @@ import com.hnulab.sharebike.em.base.BaseActivity;
 import com.hnulab.sharebike.em.overlay.BusRouteOverlay;
 import com.hnulab.sharebike.em.util.AMapUtil;
 
-public class BusRouteDetailActivity extends BaseActivity implements OnMapLoadedListener,
-		OnMapClickListener, InfoWindowAdapter, OnInfoWindowClickListener, OnMarkerClickListener {
+public class BusRouteDetailActivity extends BaseActivity implements AMap.OnMapLoadedListener,
+AMap.OnMapClickListener, AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMarkerClickListener {
 	private AMap aMap;
 	private MapView mapView;
 	private BusPath mBuspath;

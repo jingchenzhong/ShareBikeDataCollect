@@ -9,16 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnInfoWindowClickListener;
-import com.amap.api.maps.AMap.OnMapClickListener;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -32,11 +28,13 @@ import com.hnulab.sharebike.em.R;
 import com.hnulab.sharebike.em.util.AMapUtil;
 import com.hnulab.sharebike.em.util.ToastUtil;
 
+
+
 /**
  * 公交出行路线规划 实现
  */
-public class BusRouteActivity extends Activity implements OnMapClickListener,
-		OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
+public class BusRouteActivity extends Activity implements AMap.OnMapClickListener,
+AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.InfoWindowAdapter, OnRouteSearchListener {
 	private AMap aMap;
 	private MapView mapView;
 	private Context mContext;

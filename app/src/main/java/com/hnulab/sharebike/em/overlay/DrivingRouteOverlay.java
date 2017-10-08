@@ -3,14 +3,14 @@ package com.hnulab.sharebike.em.overlay;
 import android.content.Context;
 import android.graphics.Color;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.model.BitmapDescriptor;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.PolylineOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.model.BitmapDescriptor;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps2d.model.PolylineOptions;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.DrivePath;
 import com.amap.api.services.route.DriveStep;
@@ -175,7 +175,8 @@ public class DrivingRouteOverlay extends RouteOverlay{
 		}
         mPolylineOptionscolor.add(endPoint); 
         colorList.add(getDriveColor());
-        mPolylineOptionscolor.colorValues(colorList);
+        // TODO: 2017/10/8 3D-2D
+//        mPolylineOptionscolor.colorValues(colorList);
     }
     
     private int getcolor(String status) {

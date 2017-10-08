@@ -1,13 +1,12 @@
 package com.hnulab.sharebike.em.overlay;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.LatLngBounds;
-import com.amap.api.maps.model.LatLngBounds.Builder;
-import com.amap.api.maps.model.Polyline;
-import com.amap.api.maps.model.PolylineOptions;
+
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.LatLngBounds;
+import com.amap.api.maps2d.model.Polyline;
+import com.amap.api.maps2d.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class TraceOverlay {
 	}
 
 	public void setProperCamera(List<LatLng> lists) {
-		Builder builder = LatLngBounds.builder();
+		LatLngBounds.Builder builder = LatLngBounds.builder();
 		if (lists == null || lists.size() == 0) {
 			return;
 		}
@@ -80,8 +79,9 @@ public class TraceOverlay {
 	private PolylineOptions options() {
 		if (mOption == null) {
 			mOption = new PolylineOptions();
-			mOption.setCustomTexture(BitmapDescriptorFactory
-					.fromAsset("tracelinetexture.png"));
+			// TODO: 2017/10/8 3D--2D
+//			mOption.setCustomTexture(BitmapDescriptorFactory
+//					.fromAsset("tracelinetexture.png"));
 			mOption.width(40);
 		}
 		return mOption;

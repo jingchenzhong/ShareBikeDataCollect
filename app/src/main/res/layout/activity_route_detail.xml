@@ -62,12 +62,12 @@
                 android:listSelector="@color/transparent"></ListView>
         </LinearLayout>
 
-        <com.amap.api.maps.MapView
+        <com.amap.api.maps2d.MapView
             android:id="@+id/route_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/bus_path"
-            android:visibility="gone"></com.amap.api.maps.MapView>
+            android:visibility="gone"></com.amap.api.maps2d.MapView>
 
     </LinearLayout>
 </layout>

@@ -143,12 +143,12 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <com.amap.api.maps.MapView
+        <com.amap.api.maps2d.MapView
             android:id="@+id/route_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottom_layout"
-            android:layout_below="@id/routemap_header"></com.amap.api.maps.MapView>
+            android:layout_below="@id/routemap_header"></com.amap.api.maps2d.MapView>
 
 
         <LinearLayout

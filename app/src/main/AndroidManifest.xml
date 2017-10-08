@@ -73,7 +73,7 @@
         <activity android:name=".activity.DestinationActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.PersonalInformationActivity" android:screenOrientation="portrait"></activity>
         <activity android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity" android:theme="@style/ImagePickerThemeFullScreen"/>
-        <activity android:name=".activity.MyTripActivity" android:screenOrientation="portrait"/>
+        <!--<activity android:name=".activity.MyTripActivity" android:screenOrientation="portrait"/>-->
         <activity android:name=".activity.LoginActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.MyWalletActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.MyMessageActivity" android:screenOrientation="portrait"/>

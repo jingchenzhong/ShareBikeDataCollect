@@ -1,6 +1,7 @@
 package com.hnulab.sharebike.em.util;
 
-import com.amap.api.maps.model.LatLng;
+
+import com.amap.api.maps2d.model.LatLng;
 
 public class Constants {
 

@@ -1,6 +1,5 @@
 package com.hnulab.sharebike.em.activity.route;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,16 +12,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.AMap.InfoWindowAdapter;
-import com.amap.api.maps.AMap.OnInfoWindowClickListener;
-import com.amap.api.maps.AMap.OnMapClickListener;
-import com.amap.api.maps.AMap.OnMarkerClickListener;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.BusRouteResult;
@@ -46,8 +41,8 @@ import com.hnulab.sharebike.em.util.ToastUtil;
 /**
  * Route路径规划: 驾车规划、公交规划、步行规划
  */
-public class RouteActivity extends BaseActivity implements OnMapClickListener,
-		OnMarkerClickListener, OnInfoWindowClickListener, InfoWindowAdapter, OnRouteSearchListener {
+public class RouteActivity extends BaseActivity implements AMap.OnMapClickListener,
+AMap.OnMarkerClickListener, AMap.OnInfoWindowClickListener, AMap.InfoWindowAdapter, OnRouteSearchListener {
 	private AMap aMap;
 	private MapView mapView;
 	private Context mContext;
