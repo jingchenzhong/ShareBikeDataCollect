@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             handler_key key = handler_key.values()[msg.what];
             switch (key) {
                 case UPLOADSUCCESS:
-                    ToastUtil.show(MainActivity.this, "数据上传成功");
+                    ToastUtil.show(MainActivity.this, "数据上传成功" + envData.toString());
                     break;
                 case REDUPLOADSUCCESS:
                     ToastUtil.show(MainActivity.this, "红包所在地数据上传成功");
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "红包所在地上传数据失败");
                     break;
                 case OUYOFPALACE:
-                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围(人没在湖师大)");
+                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围(人没在湖师大)" + envData.toString());
                     break;
                 case OUTOFREDRANGE:
                     ToastUtil.show(MainActivity.this, "您不在红包获取范围");
@@ -1168,10 +1168,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 Thread loginThread = new Thread(new SendDataThread());
                 loginThread.start();
 
-                Message msg = new Message();
-                msg.what = handler_key.UPLOADSUCCESS.ordinal();
-                handler.sendMessage(msg);
-                Log.i("server", "start");
+//                Message msg = new Message();
+//                msg.what = handler_key.UPLOADSUCCESS.ordinal();
+//                handler.sendMessage(msg);
+//                Log.i("server", "start");
 
             }
         }
@@ -1206,6 +1206,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             isUpload = false;
             System.out.print(1);
 
+            Message msg = new Message();
+            msg.what = handler_key.UPLOADSUCCESS.ordinal();
+            handler.sendMessage(msg);
+            Log.i("server", "start");
             //接收数据
 //            String jsonBack = result;
 //            EnvData data = new Gson().fromJson(jsonBack,EnvData.class);
