@@ -50,6 +50,7 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.ServiceSettings;
 import com.amap.api.services.route.BusRouteResult;
 import com.amap.api.services.route.DriveRouteResult;
 import com.amap.api.services.route.RideRouteResult;
@@ -216,6 +217,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         OUYOFPALACE,
         //不在获取红包范围内
         OUTOFREDRANGE,
+        //当前位置信息
+        LOCATION,
 
     }
 
@@ -240,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 case OUTOFREDRANGE:
                     ToastUtil.show(MainActivity.this, "您不在红包获取范围");
                     break;
+                case LOCATION:
+
+                    ToastUtil.show(MainActivity.this, (String) msg.obj);
+                    break;
             }
         }
     };
@@ -253,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         x.Ext.setDebug(org.xutils.BuildConfig.DEBUG); // 是否输出debug日志, 开启debug会影响性能.
         x.view().inject(this);
 
+        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
         mBinding = DataBindingUtil.setContentView(this, com.hnulab.sharebike.em.R.layout.activity_main);
         initId();
         StatusBarUtil.setColorNoTranslucentForDrawerLayout(MainActivity.this, drawerLayout, CommonUtils.getColor(com.hnulab.sharebike.em.R.color.colorTheme));
@@ -389,9 +397,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
      * 初始化定位
      */
     private void initLocation() {
+        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
         mLocationTask = LocationTask.getInstance(getApplicationContext());
         mLocationTask.setOnLocationGetListener(this);
         mRegeocodeTask = new RegeocodeTask(getApplicationContext());
+
     }
 
     // 定义 Marker 点击事件监听
@@ -972,11 +982,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         if (!isClickIdentification) {
             mRecordPositon = cameraPosition.target;
         }
+        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
+
         mStartPosition = cameraPosition.target;
         mRegeocodeTask.setOnLocationGetListener(this);
-        mRegeocodeTask
-                .search(mStartPosition.latitude, mStartPosition.longitude);
-//        Utils.removeMarkers();
+//        mRegeocodeTask
+//                .search(mStartPosition.latitude, mStartPosition.longitude);
+
+//        mRegeocodeTask
+//                .search(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude);
+
+        Utils.removeMarkers();
         if (mIsFirst) {
             // TODO: 2017/9/14 实现：
             // 1、实际红包和实际车辆；2、改为传三个参数：地图、LatLng集合（经度坐标、纬度坐标、红包是否已抢标志）
@@ -989,6 +1005,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             iv_scan_code.setVisibility(View.VISIBLE);
             createInitialPosition(cameraPosition.target.latitude, cameraPosition.target.longitude);//当前经纬度
             createMovingPosition();
+            //逆地址转换定位点坐标
+            mRegeocodeTask
+                .search(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude);
+
             mIsFirst = false;
         }
 
@@ -1117,7 +1137,16 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     @Override
     public void onLocationGet(PositionEntity entity) {
         // todo 这里在网络定位时可以减少一个逆地理编码
+        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
+
         Log.e("onLocationGet", "onLocationGet" + entity.address);
+
+        Message msg = new Message();
+        msg.what = handler_key.LOCATION.ordinal();
+        msg.obj = entity.address;
+        handler.sendMessage(msg);
+
+
         RouteTask.getInstance(getApplicationContext()).setStartPoint(entity);
         mStartPosition = new LatLng(entity.latitue, entity.longitude);
         if (mIsFirstShow) {
@@ -1456,12 +1485,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
      * 自定义infowinfow窗口
      */
     public void render(Marker marker, View view) {
-        TextView tv_time = (TextView) view.findViewById(R.id.tv_time);
-        TextView tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
         TextView tv_distance = (TextView) view.findViewById(R.id.tv_distance);
-        tv_time.setText(time[0]);
-        tv_time_info.setText(time[1]);
         tv_distance.setText(distance);
+
+//        TextView tv_time = (TextView) view.findViewById(R.id.tv_time);
+//        TextView tv_time_info = (TextView) view.findViewById(R.id.tv_time_info);
+//        tv_time.setText(time[0]);
+//        tv_time_info.setText(time[1]);
     }
 
     @Override

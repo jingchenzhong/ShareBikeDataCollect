@@ -122,7 +122,7 @@ public class BusSegmentListAdapter extends BaseAdapter {
 				holder.busDirUp.setVisibility(View.VISIBLE);
 				holder.busDirDown.setVisibility(View.VISIBLE);
 				holder.busLineName.setText("步行"
-						+ (int) item.getWalk().getDistance() + "米");
+						+ (int) item.getWalk().getDistance() + "meter");
 				holder.busStationNum.setVisibility(View.GONE);
 				holder.busExpandImage.setVisibility(View.GONE);
 				return convertView;

@@ -1,8 +1,10 @@
 package com.hnulab.sharebike.em.util;
 
 public class ChString {
-	public static final String Kilometer = "\u516c\u91cc";// "公里";
-	public static final String Meter = "\u7c73";// "米";
+	public static final String Kilometer = "km";// "公里";
+	public static final String Meter = "m";// "米";
+//	public static final String Kilometer = "\u516c\u91cc";// "公里";
+//	public static final String Meter = "\u7c73";// "米";
 	public static final String ByFoot = "\u6b65\u884c";// "步行";
 	public static final String To = "\u53bb\u5f80";// "去往";
 	public static final String Station = "\u8f66\u7ad9";// "车站";

@@ -10,11 +10,13 @@ package com.hnulab.sharebike.em.lib;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.amap.api.services.core.ServiceSettings;
 
 
 /**
@@ -113,18 +115,30 @@ public class LocationTask implements AMapLocationListener,
 	@Override
 	public void onLocationChanged(AMapLocation amapLocation) {
 		if (amapLocation != null && amapLocation.getErrorCode() == 0) {
+			ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
 			PositionEntity entity = new PositionEntity();
+
+			mRegecodeTask
+					.search(amapLocation.getLatitude(), amapLocation.getLongitude());
+
+
 			entity.latitue = amapLocation.getLatitude();
 			entity.longitude = amapLocation.getLongitude();
+
 //			entity.latitue = amapLocation.getLatitude()+sum;
 //			entity.longitude = amapLocation.getLongitude()+sum;
 //			sum+=5;
 
 			if (!TextUtils.isEmpty(amapLocation.getAddress())) {
-				entity.address = amapLocation.getAddress();
+				ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
+//				entity.address = amapLocation.getAddress();
+				entity.address = mRegecodeTask.getAddress();
+				Log.i("CurrentAddress",entity.address);
 			}
 			if (!TextUtils.isEmpty(amapLocation.getCity())) {
-				entity.city = amapLocation.getCity();
+				ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
+//				entity.city = amapLocation.getCity();
+				entity.city = mRegecodeTask.getCity();
 			}
 			mOnLocationGetlisGetListener.onLocationGet(entity);
 
@@ -133,14 +147,12 @@ public class LocationTask implements AMapLocationListener,
 
 	@Override
 	public void onLocationGet(PositionEntity entity) {
-
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onRegecodeGet(PositionEntity entity) {
-
 		// TODO Auto-generated method stub
 
 	}
