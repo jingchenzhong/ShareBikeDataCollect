@@ -941,7 +941,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
                     //split[2]-->27.20C
                     envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
-                    //split[3]-->67.3%
+                    //split[3]-->67.3%0
                     envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
 
 //                    Log.i("环境数据", "原始数据：-->" + result);
