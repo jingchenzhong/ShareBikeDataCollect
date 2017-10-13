@@ -47,6 +47,7 @@ import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
@@ -83,7 +84,6 @@ import com.hnulab.sharebike.em.overlay.WalkRouteOverlay;
 import com.hnulab.sharebike.em.util.AMapUtil;
 import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 import com.hnulab.sharebike.em.util.CommonUtils;
-import com.hnulab.sharebike.em.util.Distance;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         REDUPLOADSUCCESS,
         //主动上传数据失败（测试用）
         REDUPLOADFAIL,
-        //不在采集范围
+        //不在采集范围(没在湖师大)
         OUYOFPALACE,
         //不在获取红包范围内
         OUTOFREDRANGE,
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "红包所在地上传数据失败");
                     break;
                 case OUYOFPALACE:
-                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围");
+                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围(没在湖师大)"+ envData.toString());
                     break;
                 case OUTOFREDRANGE:
                     ToastUtil.show(MainActivity.this, "您不在红包获取范围");
@@ -270,6 +270,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         initBitmap();
         initAMap();
         initLocation();
+
+//        MyLocationStyle
 
         RouteTask.getInstance(getApplicationContext())
                 .addRouteCalculateListener(this);
@@ -454,14 +456,19 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * auther：xuewenliao
                              * time：2017/9/26 9:37
                              */
-                            double radius = Distance.GetRadius(redPackageLocations);
+//                            double radius = Distance.GetRadius(redPackageLocations);
+                            double radius =  0.0002;
+
                             Log.i("radius", "radius:" + String.valueOf(radius));
 
-//                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude,marker.getPosition().latitude,marker.getPosition().longitude));
-                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
+//                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude, mInitialMark.getPosition().longitude, marker.getPosition().latitude, marker.getPosition().longitude));
+//                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
+                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
+                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
+
                             Log.i("radius", "distance:" + String.valueOf(distance));
 
-                            if (distance < radius) {
+                            if (Ladistance < radius && Lodistance < radius) {
 
 //                                tempMark.remove();
 
@@ -912,11 +919,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     envData.setE_pm5(Double.parseDouble(mp_data[1]));
                     envData.setE_pm10(Double.parseDouble(mp_data[2]));
                     //split[1]-->1602.29ppm
-                    envData.setE_humidity(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
+                    envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
                     //split[2]-->27.20C
                     envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
                     //split[3]-->67.3%
-                    envData.setE_co2(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
+                    envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
 
 //                    Log.i("环境数据", "原始数据：-->" + result);
 //                    Log.i("环境数据", "浓度：-->" + envData.toString());
@@ -1064,6 +1071,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         markerOptions.icon(initBitmap);
         mInitialMark = aMap.addMarker(markerOptions);
         mInitialMark.setClickable(false);
+        mInitialMark.setVisible(false);
     }
 
     /**
@@ -1087,6 +1095,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         // todo 这里在网络定位时可以减少一个逆地理编码
         Log.e("onLocationGet", "onLocationGet" + entity.address);
         RouteTask.getInstance(getApplicationContext()).setStartPoint(entity);
+
+        MyLocationStyle myLocationStyle;
+//        myLocationStyle.myLocationIcon(initBitmap);
+
+        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        myLocationStyle.interval(1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+//aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
+        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+
         mStartPosition = new LatLng(entity.latitue, entity.longitude);
         if (mIsFirstShow) {
             CameraUpdate cameraUpate = CameraUpdateFactory.newLatLngZoom(
@@ -1136,10 +1155,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 Thread loginThread = new Thread(new SendDataThread());
                 loginThread.start();
 
-                Message msg = new Message();
-                msg.what = handler_key.UPLOADSUCCESS.ordinal();
-                handler.sendMessage(msg);
-                Log.i("server", "start");
+//                Message msg = new Message();
+//                msg.what = handler_key.UPLOADSUCCESS.ordinal();
+//                handler.sendMessage(msg);
+//                Log.i("server", "start");
 
             }
         }
@@ -1174,6 +1193,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             isUpload = false;
             System.out.print(1);
 
+
+            Message msg = new Message();
+            msg.what = handler_key.UPLOADSUCCESS.ordinal();
+            handler.sendMessage(msg);
+            Log.i("server", "start");
             //接收数据
 //            String jsonBack = result;
 //            EnvData data = new Gson().fromJson(jsonBack,EnvData.class);

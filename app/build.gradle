@@ -49,7 +49,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     testCompile 'junit:junit:4.12'
-    compile files('src/main/jniLibs/AMap3DMap_5.0.0_AMapNavi_5.0.1_AMapSearch_5.0.0_AMapLocation_3.3.0_20170410.jar')
     compile 'cn.yipianfengye.android:zxing-library:2.1'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
     compile 'com.lzy.widget:imagepicker:0.5.4'
@@ -57,4 +56,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     //popWindow
     compile 'com.github.razerdp:BasePopup:1.8.1'
+    compile files('src/main/jniLibs/AMap3DMap_5.4.0_AMapNavi_5.4.0_AMapSearch_5.3.1_AMapLocation_3.6.1_20171012.jar')
 }

@@ -7,6 +7,7 @@
 
 package com.hnulab.sharebike.em.lib;
 
+
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.LatLng;
