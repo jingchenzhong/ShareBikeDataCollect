@@ -38,8 +38,8 @@ public class RedpackageDialog extends DialogFragment {
     private ImageView iv_cancel;
     private TextView tv_collectionTime;
     private TextView tv_tip;
-    public static int secondleft = 11000;//服务器传来的倒计时时间
-    private String money = "20元";//金额
+    public static int secondleft = 6000;//服务器传来的倒计时时间
+    private String money = "0.5 dols";//金额
 
 
     public static RedpackageDialog getInstance() {
@@ -80,7 +80,7 @@ public class RedpackageDialog extends DialogFragment {
 
         @Override
         public void onTick(long millisUntilFinished) {
-            tv_collectionTime.setText("倒计时\n" + millisUntilFinished/1000 + "秒");
+            tv_collectionTime.setText("Countdown\n" + millisUntilFinished/1000 + "s");
             tv_collectionTime.setTextSize(20);
             tv_collectionTime.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         }
@@ -88,7 +88,7 @@ public class RedpackageDialog extends DialogFragment {
         @Override
         public void onFinish() {
             startRotate();
-            tv_tip.setText("钱来喽");
+            tv_tip.setText("gift money");
             tv_tip.setTextSize(25);
             // TODO: 2017/9/22 将来要改成传过来的金额
             tv_collectionTime.setText(money);

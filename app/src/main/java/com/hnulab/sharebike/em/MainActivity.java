@@ -84,6 +84,7 @@ import com.hnulab.sharebike.em.overlay.WalkRouteOverlay;
 import com.hnulab.sharebike.em.util.AMapUtil;
 import com.hnulab.sharebike.em.util.BluetoothAutoConnectUtils;
 import com.hnulab.sharebike.em.util.CommonUtils;
+import com.hnulab.sharebike.em.util.Distance;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -457,18 +458,20 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius =  0.0002;
+                            double radius = 0.0002;
+//                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
 
 //                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude, mInitialMark.getPosition().longitude, marker.getPosition().latitude, marker.getPosition().longitude));
 //                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
-                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
-                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
-
+//                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
+//                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
+                            double distance = Distance.getDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude);
                             Log.i("radius", "distance:" + String.valueOf(distance));
+//                          Ladistance < radius && Lodistance < radius
 
-                            if (Ladistance < radius && Lodistance < radius) {
+                            if (distance<radius) {
 
 //                                tempMark.remove();
 
@@ -525,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
                     redDatas.add(clone);
                     Thread.sleep(2000);
-                    if (redDatas.size() == 5) {
+                    if (redDatas.size() == 2) {
 
 //                        new Thread(new SendRedCollectinThread()).start();
                         Gson gson = new Gson();
@@ -1063,7 +1066,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     /**
      * 创建初始位置图标
      */
-    private void createInitialPosition(double lat, double lng) {
+        private void createInitialPosition(double lat, double lng) {
         MarkerOptions markerOptions = new MarkerOptions();
 //        markerOptions.setFlat(true);
         markerOptions.anchor(0.5f, 0.5f);
@@ -1102,6 +1105,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         myLocationStyle.interval(1000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
         aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+//aMap.getUiSettings().setMyLocationButtonEnabled(true);设置默认定位按钮是否显示，非必需设置。
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
 
         mStartPosition = new LatLng(entity.latitue, entity.longitude);
