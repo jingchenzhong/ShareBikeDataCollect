@@ -464,16 +464,21 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius =  19.62308623512004;
+                            double radius = 0.0002;
+//                            double radius = 19.6;
+
                             Log.i("radius", "radius:" + String.valueOf(radius));
 
-                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude,marker.getPosition().latitude,marker.getPosition().longitude));
+//                            double distance = Math.abs(Distance.GetDistance(mInitialMark.getPosition().latitude, mInitialMark.getPosition().longitude, marker.getPosition().latitude, marker.getPosition().longitude));
 //                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
+//                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
+//                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
+                            double distance = Distance.getDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude);
                             Log.i("radius", "distance:" + String.valueOf(distance));
+//                          Ladistance < radius && Lodistance < radius
 
-                            if (distance < radius) {
+                            if (distance<radius) {
 
-//                                tempMark.remove();
 
                                 //开启红包主动传数据线程
                                 redSendThread = new Thread(new RedSendThread());
@@ -522,13 +527,14 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         clone.setE_latitfude(mStartPoint.getLatitude());
                         clone.setE_longitude(mStartPoint.getLongitude());
 
+                        Log.i("clone2",mStartPoint.getLatitude()+"..."+mStartPoint.getLongitude());
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
 
                     redDatas.add(clone);
                     Thread.sleep(2000);
-                    if (redDatas.size() == 5) {
+                    if (redDatas.size() == 2) {
 
 //                        new Thread(new SendRedCollectinThread()).start();
                         Gson gson = new Gson();
@@ -593,6 +599,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
+            String errorMessege = ex.getMessage();
+            Log.i("errorMessege",errorMessege);
+
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADFAIL.ordinal();
             handler.sendMessage(msg);
@@ -948,11 +957,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     envData.setE_pm5(Double.parseDouble(mp_data[1]));
                     envData.setE_pm10(Double.parseDouble(mp_data[2]));
                     //split[1]-->1602.29ppm
-                    envData.setE_humidity(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
+                    envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
                     //split[2]-->27.20C
                     envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
                     //split[3]-->67.3%
-                    envData.setE_co2(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
+                    envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
 
 //                    Log.i("环境数据", "原始数据：-->" + result);
 //                    Log.i("环境数据", "浓度：-->" + envData.toString());
@@ -982,12 +991,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         if (!isClickIdentification) {
             mRecordPositon = cameraPosition.target;
         }
-        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
+//        ServiceSettings.getInstance().setLanguage(ServiceSettings.ENGLISH);
 
         mStartPosition = cameraPosition.target;
         mRegeocodeTask.setOnLocationGetListener(this);
-//        mRegeocodeTask
-//                .search(mStartPosition.latitude, mStartPosition.longitude);
+        mRegeocodeTask
+                .search(mStartPosition.latitude, mStartPosition.longitude);
 
 //        mRegeocodeTask
 //                .search(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude);
@@ -1006,13 +1015,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             createInitialPosition(cameraPosition.target.latitude, cameraPosition.target.longitude);//当前经纬度
             createMovingPosition();
             //逆地址转换定位点坐标
-            mRegeocodeTask
-                .search(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude);
+//            mRegeocodeTask
+//                .search(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude);
 
             mIsFirst = false;
         }
 
-         // 保证定位图标在地图上方，点击后不会卡死
+        // 保证定位图标在地图上方，点击后不会卡死
         if (mInitialMark != null) {
 //            mInitialMark.setToTop();
             mInitialMark.setVisible(true);
@@ -1141,10 +1150,10 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         Log.e("onLocationGet", "onLocationGet" + entity.address);
 
-        Message msg = new Message();
-        msg.what = handler_key.LOCATION.ordinal();
-        msg.obj = entity.address;
-        handler.sendMessage(msg);
+//        Message msg = new Message();
+//        msg.what = handler_key.LOCATION.ordinal();
+//        msg.obj = entity.address;
+//        handler.sendMessage(msg);
 
 
         RouteTask.getInstance(getApplicationContext()).setStartPoint(entity);
@@ -1181,6 +1190,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             System.out.println(envData.getE_co2());
             System.out.println(envData.getE_city());
             System.out.println(envData.getE_address());
+
+            Log.i("clone1",entity.latitue+"..."+entity.longitude);
+
             //填充数据到集合
             envDatas.add(clone);
             Log.e("envData", "数据：" + clone.toString());
@@ -1194,8 +1206,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                  * time：2017/9/13 21:07
                  */
                 Log.i("server", "come");
-                Thread loginThread = new Thread(new SendDataThread());
-                loginThread.start();
+//                Thread loginThread = new Thread(new SendDataThread());
+//                loginThread.start();
 
 //                Message msg = new Message();
 //                msg.what = handler_key.UPLOADSUCCESS.ordinal();

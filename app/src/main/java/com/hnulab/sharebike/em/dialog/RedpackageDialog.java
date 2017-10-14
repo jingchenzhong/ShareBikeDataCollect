@@ -38,7 +38,7 @@ public class RedpackageDialog extends DialogFragment {
     private ImageView iv_cancel;
     private TextView tv_collectionTime;
     private TextView tv_tip;
-    public static int secondleft = 11000;//服务器传来的倒计时时间
+    public static int secondleft = 6000;//服务器传来的倒计时时间
     private String money = "20元";//金额
 
 

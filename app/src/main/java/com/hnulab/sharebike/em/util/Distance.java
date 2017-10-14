@@ -32,4 +32,9 @@ public class Distance {
         double scale = unit / 4;
         return scale;
     }
+
+    public static double getDistance(double lat1, double lon1 , double lat2, double lon2 ){
+        double result = Math.sqrt((lat1-lat2)*(lat1-lat2)+(lon1-lon2)*(lon1-lon2));
+        return result;
+    }
 }
