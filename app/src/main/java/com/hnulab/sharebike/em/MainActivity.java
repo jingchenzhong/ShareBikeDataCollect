@@ -600,7 +600,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
             String errorMessege = ex.getMessage();
-            Log.i("errorMessege",errorMessege);
+            Log.i("errorMesseges",errorMessege);
 
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADFAIL.ordinal();
