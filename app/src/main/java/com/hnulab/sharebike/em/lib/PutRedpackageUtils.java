@@ -134,6 +134,7 @@ public class PutRedpackageUtils {
     public static void upMarkers(AMap amap, LatLng center, List<RedPackageLocation> redPackageLocations) {
         //隐藏marker
         hideMarkers();
+//        removeMarkers();
         double redLongitude;
         double redLatitude;
         for (int i = 0; i < redPackageLocations.size(); i++) {

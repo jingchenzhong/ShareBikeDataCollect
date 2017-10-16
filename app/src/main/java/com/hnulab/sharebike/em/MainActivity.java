@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private ArrayList<Marker> updataMarkers;
     private double redLongitude;
     private double redLatitude;
+    private boolean isSuccessSend = false;//主动传数据成功
 
     private enum handler_key {
         //自动上传数据成功
@@ -229,19 +230,20 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             handler_key key = handler_key.values()[msg.what];
             switch (key) {
                 case UPLOADSUCCESS:
-                    ToastUtil.show(MainActivity.this, "数据上传成功" + envData.toString());
+                    ToastUtil.show(MainActivity.this, "The data was uploaded successfully" + envData.toString());//数据上传成功
                     break;
                 case REDUPLOADSUCCESS:
-                    ToastUtil.show(MainActivity.this, "红包所在地数据上传成功");
+                    ToastUtil.show(MainActivity.this, "Red location data uploaded successfully");//红包所在地数据上传成功
                     break;
                 case REDUPLOADFAIL:
-                    ToastUtil.show(MainActivity.this, "红包所在地上传数据失败");
+                    ToastUtil.show(MainActivity.this, "Red card location upload data failed");//红包所在地上传数据失败
                     break;
                 case OUYOFPALACE:
-                    ToastUtil.show(MainActivity.this, "您当前位置不在采集范围(人没在湖师大)" + envData.toString());
+                    ToastUtil.show(MainActivity.this, "Your current location is not in the scope of collection" + envData.toString());
+                    //您当前位置不在采集范围(人没在湖师大)
                     break;
                 case OUTOFREDRANGE:
-                    ToastUtil.show(MainActivity.this, "您不在红包获取范围");
+                    ToastUtil.show(MainActivity.this, "You are not in the red envelope to get the range");//您不在红包获取范围
                     break;
                 case LOCATION:
 
@@ -434,8 +436,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                tempMark.remove();
 
                 walkRouteOverlay.removeFromMap();
-                tempMark = null;
+//                tempMark = null;
             }
+
             startAnim(marker);
             new Thread(new Runnable() {
 
@@ -484,10 +487,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                                 redSendThread = new Thread(new RedSendThread());
                                 redSendThread.start();
 
+                                if (isSuccessSend = true) {
+
                                 //弹出一个Dialog
                                 RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
                                 RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
                                 RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+                                } else {
+                                    Message msg = new Message();
+                                    msg.what = handler_key.REDUPLOADFAIL.ordinal();
+                                    handler.sendMessage(msg);
+                                }
 
 
                             } else {
@@ -568,6 +578,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
 //            tempMark.remove();
 
+            isSuccessSend = true;
+
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
             handler.sendMessage(msg);
@@ -601,6 +613,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         public void onError(Throwable ex, boolean isOnCallback) {
             String errorMessege = ex.getMessage();
             Log.i("errorMesseges",errorMessege);
+
+            isSuccessSend = false;
 
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADFAIL.ordinal();
@@ -671,11 +685,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         if (mInitialMark != null) {
 //            mInitialMark.setToTop();
             mInitialMark.setVisible(true);
+//            mInitialMark.setDraggable(true);
 
         }
         if (mPositionMark != null) {
 //            mPositionMark.setToTop();
             mInitialMark.setVisible(true);
+//            mInitialMark.setDraggable(true);
         }
     }
 
@@ -1465,17 +1481,18 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         //遍历点，恢复点对应图标
         ArrayList<Marker> markers = PutRedpackageUtils.markers;
         if (null != tempMark) {
-            for (Marker marker : markers) {
-                if (marker.equals(tempMark)) {
-                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
-                        tempMark.setIcon(smallIdentificationBitmap);
-                    } else {
-                        tempMark.setIcon(smallredpacageBitmap);
-                    }
-                }
-            }
-//            tempMark.remove();
+//            for (Marker marker : markers) {
+//                if (marker.equals(tempMark)) {
+//                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
+//                        tempMark.setIcon(smallIdentificationBitmap);
+//                    } else {
+////                        tempMark.setIcon(smallredpacageBitmap);
+//                    }
+//                }
+//            }
             tempMark.hideInfoWindow();
+            walkRouteOverlay.removeFromMap();
+            tempMark.remove();
             tempMark = null;
         }
         if (null != walkRouteOverlay) {
