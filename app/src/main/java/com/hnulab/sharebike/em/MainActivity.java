@@ -87,6 +87,7 @@ import com.hnulab.sharebike.em.util.CommonUtils;
 import com.hnulab.sharebike.em.util.Distance;
 import com.hnulab.sharebike.em.util.ToastUtil;
 import com.hnulab.sharebike.em.view.statusbar.StatusBarUtil;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.xutils.common.Callback;
@@ -206,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private ArrayList<Marker> updataMarkers;
     private double redLongitude;
     private double redLatitude;
+    private boolean isSuccessSend = false;//主动传数据成功
+
 
     private enum handler_key {
         //自动上传数据成功
@@ -458,7 +461,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius = 0.0002;
+                            double radius = 0.0006;
 //                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
@@ -467,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
 //                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
 //                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
-                            double distance = Distance.getDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude);
+                            double distance = Distance.getDistance(mInitialMark.getPosition().latitude, mInitialMark.getPosition().longitude, marker.getPosition().latitude, marker.getPosition().longitude);
                             Log.i("radius", "distance:" + String.valueOf(distance));
 //                          Ladistance < radius && Lodistance < radius
 
@@ -479,10 +482,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                                 redSendThread = new Thread(new RedSendThread());
                                 redSendThread.start();
 
-                                //弹出一个Dialog
-                                RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
-                                RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
-                                RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+                                if (isSuccessSend = true) {
+
+                                    //弹出一个Dialog
+                                    RedpackageDialog RedpackageDialog = com.hnulab.sharebike.em.dialog.RedpackageDialog.getInstance();
+                                    RedpackageDialog.setStyle(DialogFragment.STYLE_NO_FRAME, R.style.load_dialog);
+                                    RedpackageDialog.getInstance().show(getSupportFragmentManager(), "");
+                                } else {
+                                    Message msg = new Message();
+                                    msg.what = handler_key.REDUPLOADFAIL.ordinal();
+                                    handler.sendMessage(msg);
+                                }
 
 
                             } else {
@@ -559,6 +569,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         @Override
         public void onSuccess(String result) {
 
+            isSuccessSend = true;
+
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADSUCCESS.ordinal();
             handler.sendMessage(msg);
@@ -573,6 +585,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
+
+            isSuccessSend = false;
+
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADFAIL.ordinal();
             handler.sendMessage(msg);
@@ -737,11 +752,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
-                BluetoothReceiver.BLUETOOTH_PIN = "1234";
-                BluetoothConnect();
-//                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
-//                startActivityForResult(intent, REQUEST_CODE);
+//                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
+//                BluetoothReceiver.BLUETOOTH_PIN = "1234";
+//                BluetoothConnect();
+
+                Intent intent = new Intent(MainActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQUEST_CODE);
 
 //                MarkerOptions markerOptions = new MarkerOptions();
 //                markerOptions.icon(BitmapDescriptorFactory
@@ -1414,17 +1430,18 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         //遍历点，恢复点对应图标
         ArrayList<Marker> markers = PutRedpackageUtils.markers;
         if (null != tempMark) {
-            for (Marker marker : markers) {
-                if (marker.equals(tempMark)) {
-                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
-                        tempMark.setIcon(smallIdentificationBitmap);
-                    } else {
-                        tempMark.setIcon(smallredpacageBitmap);
-                    }
-                }
-            }
-//            tempMark.remove();
+//            for (Marker marker : markers) {
+//                if (marker.equals(tempMark)) {
+//                    if (marker.getIcons().get(0).equals(bigIdentificationBitmap)) {
+//                        tempMark.setIcon(smallIdentificationBitmap);
+//                    } else {
+////                        tempMark.setIcon(smallredpacageBitmap);
+//                    }
+//                }
+//            }
             tempMark.hideInfoWindow();
+            walkRouteOverlay.removeFromMap();
+            tempMark.remove();
             tempMark = null;
         }
         if (null != walkRouteOverlay) {
