@@ -789,7 +789,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-//                BluetoothReceiver.BLUETOOTH_ADDRESS = "20:16:07:04:66:09";
+//                BluetoothReceiver.BLUETOOTH_ADDRESS = "98:D3:32:11:21:AE";
 //                BluetoothReceiver.BLUETOOTH_PIN = "1234";
 //                BluetoothConnect();
 
@@ -970,21 +970,26 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     String result = new String(buffer_new, 0, buffer_new.length - 1).split("\n")[0];
                     //数据按空格划分 ，PM按加号划分
                     String[] split = result.split(" ");
-                    String[] mp_data = split[0].split("\\+");
-                    envData.setE_pm2_5(Double.parseDouble(mp_data[0]));
-                    envData.setE_pm5(Double.parseDouble(mp_data[1]));
-                    envData.setE_pm10(Double.parseDouble(mp_data[2]));
-                    //split[1]-->1602.29ppm
-                    envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
-                    //split[2]-->27.20C
-                    envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
-                    //split[3]-->67.3%
-                    envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
+                    if (split.length == 5) {//25+33+39 1096.88ppm 23.0C 60.0% 2437214msX
 
-//                    Log.i("环境数据", "原始数据：-->" + result);
-//                    Log.i("环境数据", "浓度：-->" + envData.toString());
-                    //开始采集数据
-                    isStartPick = true;
+                        String[] mp_data = split[0].split("\\+");
+                        envData.setE_pm2_5(Double.parseDouble(mp_data[0]));
+                        envData.setE_pm5(Double.parseDouble(mp_data[1]));
+                        envData.setE_pm10(Double.parseDouble(mp_data[2]));
+                        //split[1]-->1602.29ppm 二氧化碳
+                        envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
+                        //split[2]-->27.20C 温度
+                        envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
+                        //split[3]-->67.3%  湿度
+                        envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
+
+                        Log.i("环境数据", "原始数据：-->" + result);
+                        Log.i("环境数据", "浓度：-->" + envData.toString());
+                        //开始采集数据
+                        isStartPick = true;
+                    } else {
+                        Log.i("环境数据","蓝牙数据格式不合法");
+                    }
                     //延迟1s
                     Thread.sleep(2000);
 //                                                  String[] split = s.split("\n");
@@ -1224,13 +1229,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                  * time：2017/9/13 21:07
                  */
                 Log.i("server", "come");
-//                Thread loginThread = new Thread(new SendDataThread());
-//                loginThread.start();
+                Thread loginThread = new Thread(new SendDataThread());
+                loginThread.start();
 
-//                Message msg = new Message();
-//                msg.what = handler_key.UPLOADSUCCESS.ordinal();
-//                handler.sendMessage(msg);
-//                Log.i("server", "start");
+                Message msg = new Message();
+                msg.what = handler_key.UPLOADSUCCESS.ordinal();
+                handler.sendMessage(msg);
+                Log.i("server", "start");
 
             }
         }
