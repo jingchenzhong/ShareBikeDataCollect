@@ -469,7 +469,6 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
                             double radius = 0.0008;
-//                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
 
