@@ -468,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius = 0.0006;
+                            double radius = 0.0004;
 //                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
@@ -477,6 +477,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                            double distance = Math.abs(Distance.GetDistance(mStartPoint.getLatitude(), mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude));
 //                            double Ladistance = Math.abs(mStartPoint.getLatitude() - marker.getPosition().latitude);
 //                            double Lodistance = Math.abs(mStartPoint.getLongitude() - marker.getPosition().longitude);
+                            //移动点坐标--测试
+//                            double distance = Distance.getDistance(mStartPoint.getLatitude(),mStartPoint.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude);
+                            //真实原点坐标--真实
                             double distance = Distance.getDistance(mInitialMark.getPosition().latitude,mInitialMark.getPosition().longitude, marker.getPosition().latitude, marker.getPosition().longitude);
                             Log.i("radius", "distance:" + String.valueOf(distance));
 //                          Ladistance < radius && Lodistance < radius
@@ -535,10 +538,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         clone = envData.clone();
 //                        clone.setE_latitfude(mStartPoint.getLatitude());
 //                        clone.setE_longitude(mStartPoint.getLongitude());
-                        clone.setE_latitfude(mStartPoint.getLatitude());
-                        clone.setE_longitude(mStartPoint.getLongitude());
-
-                        Log.i("clone2",mStartPoint.getLatitude()+"..."+mStartPoint.getLongitude());
+                        //移动点坐标
+//                        clone.setE_latitfude(mStartPoint.getLatitude());
+//                        clone.setE_longitude(mStartPoint.getLongitude());
+                        //原点坐标
+                        clone.setE_latitfude(mInitialMark.getPosition().latitude);
+                        clone.setE_longitude(mInitialMark.getPosition().longitude);
+                        Log.i("clone2",mInitialMark.getPosition().latitude+"..."+mInitialMark.getPosition().longitude);
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
