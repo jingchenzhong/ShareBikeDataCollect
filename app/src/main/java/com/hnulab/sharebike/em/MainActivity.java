@@ -102,6 +102,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+
 //import com.hnulab.sharebike.em.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements AMap.OnCameraChangeListener,
@@ -221,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         OUTOFREDRANGE,
         //当前位置信息
         LOCATION,
+        //展示数据
+        SHOWDATA
 
     }
 
@@ -232,6 +235,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             switch (key) {
                 case UPLOADSUCCESS:
                     ToastUtil.show(MainActivity.this, "The data was uploaded successfully" + envData.toString());//数据上传成功
+                    break;
+                case SHOWDATA:
+                    ToastUtil.show(MainActivity.this, "this data：" + envData.toString());//数据上传成功
                     break;
                 case REDUPLOADSUCCESS:
                     ToastUtil.show(MainActivity.this, "Red location data uploaded successfully");//红包所在地数据上传成功
@@ -1238,11 +1244,17 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 Thread loginThread = new Thread(new SendDataThread());
                 loginThread.start();
 
-                Message msg = new Message();
-                msg.what = handler_key.UPLOADSUCCESS.ordinal();
-                handler.sendMessage(msg);
+//                Message msg = new Message();
+//                msg.what = handler_key.UPLOADSUCCESS.ordinal();
+//                handler.sendMessage(msg);
                 Log.i("server", "start");
 
+            }
+            //每两条数据进行一次Toast显示
+            if (envDatas.size() % 2 == 0) {
+                Message msg = new Message();
+                msg.what = handler_key.SHOWDATA.ordinal();
+                handler.sendMessage(msg);
             }
         }
 
