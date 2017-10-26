@@ -243,10 +243,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "Red location data uploaded successfully");//红包所在地数据上传成功
                     break;
                 case REDUPLOADFAIL:
-                    ToastUtil.show(MainActivity.this, "Red card location upload data failed");//红包所在地上传数据失败
+                    ToastUtil.show(MainActivity.this, "Red card location upload data failed（Not in the specified area）");//红包所在地上传数据失败
                     break;
                 case OUYOFPALACE:
-                    ToastUtil.show(MainActivity.this, "Your current location is not in the scope of collection" + envData.toString());
+                    String erro = (String) msg.obj;
+                    ToastUtil.show(MainActivity.this, "Your current location is not in the scope of collection" + erro + envData.toString());
                     //您当前位置不在采集范围(人没在湖师大)
                     break;
                 case OUTOFREDRANGE:
@@ -324,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         bigredpacageBitmap = BitmapDescriptorFactory
                 .fromResource(R.drawable.marker_red_package_big);
         smallredpacageBitmap = BitmapDescriptorFactory
-                .fromResource(R.drawable.marker_red_package);
+                .fromResource(R.drawable.marker_red_package2);
     }
 
     private void initId() {
@@ -474,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius = 0.0004;
+                            double radius = 0.00004;
 //                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
@@ -1232,7 +1233,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             envDatas.add(clone);
             Log.e("envData", "数据：" + clone.toString());
             //如果缓存数据已经有100条
-            if (envDatas.size() == 10 && isUpload == false) {
+            if (envDatas.size() == 2 && isUpload == false) {
                 // TODO: 2017/9/14 线程锁处理
                 isUpload = true;
                 /**
@@ -1301,9 +1302,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
         @Override
         public void onError(Throwable ex, boolean isOnCallback) {
+
+            String error = ex.getMessage();
+            Log.i("error",error);
             //坐标没在湖师大在此处接收数据
             Message msg = new Message();
             msg.what = handler_key.OUYOFPALACE.ordinal();
+            msg.obj = error;
             handler.sendMessage(msg);
 
             envDatas.clear();

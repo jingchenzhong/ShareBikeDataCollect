@@ -36,7 +36,7 @@ public class PutRedpackageUtils {
          fromResource(R.drawable.stable_cluster_marker_one_normal);
     //红包的对象
     public static BitmapDescriptor bitmapPackage =
-         fromResource(R.drawable.marker_red_package);
+         fromResource(R.drawable.marker_red_package3);
 
 
     /**
