@@ -1481,11 +1481,12 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //        refreshRed.start();
 
         clickInitInfo();
-        if (initLocation != null) {
-            CameraUpdate cameraUpate = CameraUpdateFactory.newLatLngZoom(
-                    initLocation, 17f);
-            aMap.animateCamera(cameraUpate);
-        }
+        //移动坐标回圆点
+//        if (initLocation != null) {
+//            CameraUpdate cameraUpate = CameraUpdateFactory.newLatLngZoom(
+//                    initLocation, 17f);
+//            aMap.animateCamera(cameraUpate);
+//        }
     }
 
     private void clickMap() {
