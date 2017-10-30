@@ -243,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "Red location data uploaded successfully");//红包所在地数据上传成功
                     break;
                 case REDUPLOADFAIL:
-                    ToastUtil.show(MainActivity.this, "Red card location upload data failed（Not in the specified area）");//红包所在地上传数据失败
+                    String erro1 = (String) msg.obj;
+                    ToastUtil.show(MainActivity.this, "Red card location upload data failed（Not in the specified area）" + erro1);//红包所在地上传数据失败
                     break;
                 case OUYOFPALACE:
                     String erro = (String) msg.obj;
@@ -475,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                              * time：2017/9/26 9:37
                              */
 //                            double radius = Distance.GetRadius(redPackageLocations);
-                            double radius = 0.00004;
+                            double radius = 0.00002;
 //                            double radius = 19.6;
 
                             Log.i("radius", "radius:" + String.valueOf(radius));
@@ -632,6 +633,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 
             Message msg = new Message();
             msg.what = handler_key.REDUPLOADFAIL.ordinal();
+            msg.obj = errorMessege;
             handler.sendMessage(msg);
             redDatas.clear();
         }
