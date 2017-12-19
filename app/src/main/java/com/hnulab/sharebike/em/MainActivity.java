@@ -100,6 +100,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 
@@ -208,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
     private double redLongitude;
     private double redLatitude;
     private boolean isSuccessSend = false;//主动传数据成功
+    private int timeCount;//刷新时长
+    private Timer timer;
 
     private enum handler_key {
         //自动上传数据成功
@@ -223,7 +227,11 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
         //当前位置信息
         LOCATION,
         //展示数据
-        SHOWDATA
+        SHOWDATA,
+        //倒计时通知
+        TICK_TIME,
+        //数据丢失
+        DROP_DATA,
 
     }
 
@@ -255,8 +263,20 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     ToastUtil.show(MainActivity.this, "You are not in the red envelope to get the range");//您不在红包获取范围
                     break;
                 case LOCATION:
-
                     ToastUtil.show(MainActivity.this, (String) msg.obj);
+                    break;
+                case TICK_TIME:
+                    if (timeCount > 0) {
+                        timeCount--;
+                        ToastUtil.show(MainActivity.this,"正在刷新，"+ timeCount +"s后可继续刷新");
+                    } else {
+                        timer.cancel();
+//                        iv_refresh.setClickable(true);
+                        iv_refresh.setEnabled(true);
+                    }
+                    break;
+                case DROP_DATA:
+                    ToastUtil.show(MainActivity.this,"数据不完整" + envData.toString());
                     break;
             }
         }
@@ -799,12 +819,13 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 }, 360);
                 break;
             case R.id.iv_refresh:
-                clickRefresh();
+                reFreshTimer();
+//                clickRefresh();
                 break;
             case R.id.iv_scan_code:
                 //TODO 点击扫码
 
-//                BluetoothReceiver.BLUETOOTH_ADDRESS = "98:D3:32:11:21:AE";
+//                BluetoothReceiver.BLUETOOTH_ADDRESS = "98:D3:33:81:1B:59";
 //                BluetoothReceiver.BLUETOOTH_PIN = "1234";
 //                BluetoothConnect();
 
@@ -820,6 +841,21 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
 //                markers.add(marker);
                 break;
         }
+    }
+
+    private void reFreshTimer() {
+//        iv_refresh.setClickable(false);
+        iv_refresh.setEnabled(false);
+        timeCount = 5;
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(handler_key.TICK_TIME.ordinal());
+            }
+        },1000,1000);
+
+        clickRefresh();//刷新界面
     }
 
     @Override
@@ -972,7 +1008,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     String s0 = new String(buffer, 0, num);
                     fmsg += s0;    //保存收到数据
                     for (i = 0; i < num; i++) {
-                        if ((buffer[i] == 0x0d) && (buffer[i + 1] == 0x0a)) {
+                        if ((buffer[i] == 0x0a) && (buffer[i + 1] == 0x0d)&&(buffer[i+2] == 0x0a) ) {
                             buffer_new[n] = 0x0a;
                             i++;
                         } else {
@@ -982,35 +1018,50 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     }
 
                     //获取数据
-                    String result = new String(buffer_new, 0, buffer_new.length - 1).split("\n")[0];
+                    String result = new String(buffer_new, 0, buffer_new.length).split("\n")[0];
                     //数据按空格划分 ，PM按加号划分
-                    String[] split = result.split(" ");
-                    if (split.length == 5) {//25+33+39 1096.88ppm 23.0C 60.0% 2437214msX
+                    String[] mp_data = result.split(" ");
+                    if (mp_data.length == 6) {//25+33+39 1096.88ppm 23.0C 60.0% 2437214msX
 
-                        String[] mp_data = split[0].split("\\+");
-                        envData.setE_pm2_5(Double.parseDouble(mp_data[0]));
-                        envData.setE_pm5(Double.parseDouble(mp_data[1]));
-                        envData.setE_pm10(Double.parseDouble(mp_data[2]));
+
+                        envData.setE_pm2_5(Double.parseDouble(mp_data[0].split(":")[1]));
+                        envData.setE_pm5(Double.parseDouble(mp_data[1].split(":")[1]));
+                        envData.setE_pm10(Double.parseDouble(mp_data[2].split(":")[1]));
                         //split[1]-->1602.29ppm 二氧化碳
-                        envData.setE_co2(Double.parseDouble(split[1].substring(0, split[1].length() - 3)));
+                        envData.setE_co2(Double.parseDouble(mp_data[3].split(":")[1]));
                         //split[2]-->27.20C 温度
-                        envData.setE_temperature(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
+                        envData.setE_temperature(Double.parseDouble(mp_data[4].split(":")[1]));
                         //split[3]-->67.3%  湿度
-                        envData.setE_humidity(Double.parseDouble(split[3].substring(0, split[3].length() - 1)));
+                        envData.setE_humidity(Double.parseDouble(mp_data[5].split(":")[1]));
 
                         Log.i("环境数据", "原始数据：-->" + result);
                         Log.i("环境数据", "浓度：-->" + envData.toString());
                         //开始采集数据
                         isStartPick = true;
                     } else {
+//                        String[] mp_data = split[0].split(" ");
+                        String key = mp_data[0].split(":")[0];
+                        switch (key) {
+                            case "PM1":
+                                envData.setE_pm2_5(Double.parseDouble(mp_data[0].split(":")[1]));
+                            case "PM2":
+                                envData.setE_pm5(Double.parseDouble(mp_data[1].split(":")[1]));
+                            case "PM10":
+                                envData.setE_pm10(Double.parseDouble(mp_data[2].split(":")[1]));
+                            case "C":
+                                envData.setE_co2(Double.parseDouble(mp_data[3].split(":")[1]));
+                            case "T":
+                                envData.setE_temperature(Double.parseDouble(mp_data[4].split(":")[1]));
+                            case "H":
+                                envData.setE_humidity(Double.parseDouble(mp_data[5].split(":")[1]));
+                        }
+                        Message msg = new Message();
+                        msg.what = handler_key.DROP_DATA.ordinal();
+                        handler.sendMessage(msg);
                         Log.i("环境数据","蓝牙数据格式不合法");
                     }
                     //延迟1s
-                    Thread.sleep(2000);
-//                                                  String[] split = s.split("\n");
-//                                                  if (split!=null) {
-//                                                            System.out.println("Co2浓度：-->"+split[0]);
-//                                                  }
+                    Thread.sleep(1111);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1234,7 +1285,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
             //填充数据到集合
             envDatas.add(clone);
             Log.e("envData", "数据：" + clone.toString());
-            //如果缓存数据已经有100条
+            //如果缓存数据已经有2条
             if (envDatas.size() == 2 && isUpload == false) {
                 // TODO: 2017/9/14 线程锁处理
                 isUpload = true;
