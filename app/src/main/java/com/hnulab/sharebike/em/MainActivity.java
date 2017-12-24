@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                 case TICK_TIME:
                     if (timeCount > 0) {
                         timeCount--;
-                        ToastUtil.show(MainActivity.this,"正在刷新，"+ timeCount +"s后可继续刷新");
+//                        ToastUtil.show(MainActivity.this,"正在刷新，"+ timeCount +"s后可继续刷新");
                     } else {
                         timer.cancel();
 //                        iv_refresh.setClickable(true);
@@ -1024,8 +1024,8 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                     if (mp_data.length == 6) {//25+33+39 1096.88ppm 23.0C 60.0% 2437214msX
 
 
+                        envData.setE_pm1(Double.parseDouble(mp_data[1].split(":")[1]));
                         envData.setE_pm2_5(Double.parseDouble(mp_data[0].split(":")[1]));
-                        envData.setE_pm5(Double.parseDouble(mp_data[1].split(":")[1]));
                         envData.setE_pm10(Double.parseDouble(mp_data[2].split(":")[1]));
                         //split[1]-->1602.29ppm 二氧化碳
                         envData.setE_co2(Double.parseDouble(mp_data[3].split(":")[1]));
@@ -1043,9 +1043,9 @@ public class MainActivity extends AppCompatActivity implements AMap.OnCameraChan
                         String key = mp_data[0].split(":")[0];
                         switch (key) {
                             case "PM1":
-                                envData.setE_pm2_5(Double.parseDouble(mp_data[0].split(":")[1]));
+                                envData.setE_pm1(Double.parseDouble(mp_data[1].split(":")[1]));
                             case "PM2":
-                                envData.setE_pm5(Double.parseDouble(mp_data[1].split(":")[1]));
+                                envData.setE_pm2_5(Double.parseDouble(mp_data[0].split(":")[1]));
                             case "PM10":
                                 envData.setE_pm10(Double.parseDouble(mp_data[2].split(":")[1]));
                             case "C":

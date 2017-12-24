@@ -16,11 +16,13 @@ public class EnvData implements Cloneable{
 
     //时间
     String e_time;
-    //PM2.5
-    double e_pm2_5;
+    //PM1
+//    double e_pm2_5;
+    double e_pm1;
 
-    //PM5
-    double e_pm5;
+    //PM2_5
+//    double e_pm5;
+    double e_pm2_5;
     //PM10
     double e_pm10;
     //湿度 单位PPM
@@ -56,20 +58,20 @@ public class EnvData implements Cloneable{
         this.e_co2 = e_co2;
     }
 
+    public double getE_pm1() {
+        return e_pm1;
+    }
+
+    public void setE_pm1(double e_pm1) {
+        this.e_pm1 = e_pm1;
+    }
+
     public double getE_pm2_5() {
         return e_pm2_5;
     }
 
     public void setE_pm2_5(double e_pm2_5) {
         this.e_pm2_5 = e_pm2_5;
-    }
-
-    public double getE_pm5() {
-        return e_pm5;
-    }
-
-    public void setE_pm5(double e_pm5) {
-        this.e_pm5 = e_pm5;
     }
 
     public double getE_pm10() {
@@ -119,21 +121,22 @@ public class EnvData implements Cloneable{
     public void setE_time(String e_time) {
         this.e_time = e_time;
     }
+
     @Override
     public String toString() {
         return "EnvData{" +
-             "e_longitude=" + e_longitude +
-             ", e_latitfude=" + e_latitfude +
-             ", e_co2=" + e_co2 +
-             ", e_pm2_5=" + e_pm2_5 +
-             ", e_pm5=" + e_pm5 +
-             ", e_pm10=" + e_pm10 +
-             ", e_humidity=" + e_humidity +
-             ", e_temperature=" + e_temperature +
-             ", e_address='" + e_address + '\'' +
-             ", e_city='" + e_city + '\'' +
-             ", e_time='" + e_time + '\'' +
-             '}';
+                "e_longitude=" + e_longitude +
+                ", e_latitfude=" + e_latitfude +
+                ", e_co2=" + e_co2 +
+                ", e_time='" + e_time + '\'' +
+                ", e_pm1=" + e_pm1 +
+                ", e_pm2_5=" + e_pm2_5 +
+                ", e_pm10=" + e_pm10 +
+                ", e_humidity=" + e_humidity +
+                ", e_temperature=" + e_temperature +
+                ", e_address='" + e_address + '\'' +
+                ", e_city='" + e_city + '\'' +
+                '}';
     }
 
     @Override
